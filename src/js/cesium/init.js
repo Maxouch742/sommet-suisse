@@ -1,5 +1,4 @@
-Cesium.Ion.defaultAccessToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwNGY0Mjk4Ny1kYWMxLTQwZjMtOWM5YS0zZDY0Y2UyYTI5MTciLCJpZCI6MTk3MjAyLCJpYXQiOjE3MDg2MDY5MzN9.0zahHvP9QC7E_C0zRuIDDe_QTPEuUafXfgvRREVXAis'
+Cesium.Ion.defaultAccessToken = CESIUM_TOKEN
 
 const viewer = new Cesium.Viewer('cesiumContainer', {
   // Terrain Swissgeol
@@ -39,13 +38,8 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 
 displayBuildings()
 
-viewer.camera.flyTo({
-  // HES-SO Master
-  destination: Cesium.Cartesian3.fromDegrees(6.60798, 46.51874, 600),
-  orientation: {
-    heading: Cesium.Math.toRadians(15), // ↔ -gauche / +droite
-    pitch: Cesium.Math.toRadians(-25), // ↕ -sol / +ciel
-    roll: Cesium.Math.toRadians(0) // +penche droite
-  }
-})
-viewer.camera.completeFlight()
+const transform = Cesium.Transforms.eastNorthUpToFixedFrame(CHASSERON)
+viewer.scene.camera.lookAtTransform(
+  transform,
+  new Cesium.HeadingPitchRange(0, -Math.PI / 5, 300)
+)

@@ -72,8 +72,8 @@
                             <!-- Boutons -->
                             <div class="col-4 text-center">
                                 <button type="button" class="btn btn-secondary fw-bolder fs-5 m-2">Indice</button>
-                                <button type="button" class="btn btn-primary fw-bolder fs-5 m-2">Valider</button>
-                                <button type="button" class="btn btn-info fw-bolder fs-5 m-2">Suivante</button>
+                                <button type="button" id="validateSummit" class="btn btn-primary fw-bolder fs-5 m-2">Valider</button>
+                                <button type="button" class="btn btn-info fw-bolder fs-5 m-2" enabled>Suivante</button>
                             </div>
                         </div>
                         <!-- ./ fin 'Questions et boutons' -->
@@ -106,6 +106,9 @@
         <!-- ./ fin class="container" -->
         
         <!--------- Javascript --------->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
         <!-- Bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
@@ -119,6 +122,7 @@
         <script src="src/js/cesium/displayBuildings.js"></script>
         <script src="src/js/cesium/lookAtSummit.js"></script>
         <script src="src/js/cesium/showPyramid.js"></script>
+        <!--<script src="src/js/cesium/validateSummit.js"></script>-->
         <script src="src/js/cesium/init.js" type="module"></script>
     </body>
 

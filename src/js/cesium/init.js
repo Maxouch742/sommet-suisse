@@ -36,6 +36,31 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
   selectionIndicator: false
 })
 
-displayBuildings()
+displayBuildings(viewer)
 lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
 showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
+
+const longitude = 6.538256684
+const latitude = 46.851793418
+const altitude = 1662.2
+
+document
+  .getElementById('validateSummit')
+  .addEventListener('click', function () {
+    // Add Cylinder
+    const cylinder = viewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude),
+      cylinder: {
+        length: 200.0,
+        topRadius: 0.2,
+        bottomRadius: 0.2,
+        material: Cesium.Color.BLACK,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      },
+      label: {
+        text: 'Chasseron',
+        fillColor: Cesium.Color.WHITE,
+        horizontalOrigin: Cesium.HorizontalOrigin.RIGHT
+      }
+    })
+  })

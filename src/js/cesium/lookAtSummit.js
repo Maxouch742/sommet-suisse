@@ -1,6 +1,10 @@
 function lookAtSummit (viewer, longitude, latitude, altitude, name) {
   // Create point
-  const point = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude)
+  const point = Cesium.Cartesian3.fromDegrees(
+    longitude,
+    latitude,
+    altitude - 50
+  )
   // 6.538256684, 46.851793418, 1662.2
 
   // Deplace view

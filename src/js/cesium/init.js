@@ -37,4 +37,5 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 })
 
 displayBuildings()
-showSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
+lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
+showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')

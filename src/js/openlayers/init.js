@@ -24,3 +24,33 @@ map = new ol.Map({
     maxZoom: 9.5
   })
 })
+
+marker_source = new ol.source.Vector()
+marker_layer = new ol.layer.Vector({
+  source: marker_source
+})
+map.addLayer(marker_layer)
+console.log('map')
+
+// Ajouter un gestionnaire d'événement pour les clics sur la carte
+map.on('click', function (event) {
+  const coords = event.coordinate
+
+  // Créer un marqueur à la position cliquée
+  const marker = new ol.Feature({
+    geometry: new ol.geom.Point(coords)
+  })
+
+  // Définir une icône personnalisée (facultatif)
+  marker.setStyle(
+    new ol.style.Style({
+      image: new ol.style.Icon({
+        src: '../src/img/marker.svg',
+        scale: 0.08,
+        anchor: [0.5, 0.9]
+      })
+    })
+  )
+  // Ajouter le marqueur à la source de vecteur
+  marker_source.addFeature(marker)
+})

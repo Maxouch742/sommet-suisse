@@ -41,6 +41,11 @@
                             <img class="m-2" src="src/img/unige.png" alt="Logo de l'Université de Genève">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col text-center">
+                            <p class="fs-3 fw-bolder m-1 text-warning">Place le sommet suisse sur la carte !</p>
+                        </div>
+                    </div>
                     <!-- ./ fin header -->
 
                     <!-- Scores, indices, ... -->
@@ -61,19 +66,20 @@
                         <div class="row border">
 
                             <!-- Questions -->
-                            <div class="col-8">
-                                <p class="fw-bolder fs-3">Question: <span id="questionNombre" class="fw-normal">2</span><span class="fw-normal">/12</span></p>
+                            <div class="col-8" id="questions_text">
+                                <p class="fw-bolder fs-3">Question n°<span id="questionNombre" class="fw-normal">2</span><span class="fw-normal">/12</span></p>
                                 <p class="fw-bolder fs-5">Votre réponse: <span id="questionNombre" class="fw-normal"></span></p>
                                 <p class="fw-bolder fs-5">Ecart: <span id="questionNombre" class="fw-normal">-</span><span class="fw-normal"></span></p>
                                 <p class="fw-bolder fs-5">Points: <span id="questionNombre" class="fw-normal"></span></p>
+                                <p class="fs-6 fst-italic" id="indice_text">Indice :</p>
                             </div>
                             <!-- /. fin 'Questions' -->
 
                             <!-- Boutons -->
                             <div class="col-4 text-center">
                                 <button type="button" id="indice" class="btn btn-secondary fw-bolder fs-5 m-2">Indice</button>
-                                <button type="button" id="validateSummit" class="btn btn-primary fw-bolder fs-5 m-2">Valider</button>
-                                <button type="button" class="btn btn-info fw-bolder fs-5 m-2" enabled>Suivante</button>
+                                <button type="button" id="validateSummit" class="btn btn-primary fw-bolder fs-5 m-2" disabled>Valider</button>
+                                <button type="button" class="btn btn-info fw-bolder fs-5 m-2" disabled>Suivante</button>
                             </div>
                         </div>
                         <!-- ./ fin 'Questions et boutons' -->

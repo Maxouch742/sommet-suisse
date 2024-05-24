@@ -50,6 +50,7 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
   infoBox: false,
   selectionIndicator: false
 })
+viewer.scene.screenSpaceCameraController.maximumZoomDistance = 6378
 
 displayBuildings(viewer)
 lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
@@ -114,7 +115,7 @@ document.getElementById('indice').addEventListener('click', function () {
       material: Cesium.Color.RED
     },
     label: {
-      text: `.   ${indice.name}`,
+      text: `.    ${indice.name}`,
       fillColor: Cesium.Color.WHITE,
       horizontalOrigin: Cesium.HorizontalOrigin.LEFT
     }
@@ -161,6 +162,9 @@ document.getElementById('indice').addEventListener('click', function () {
     point1_transform,
     new Cesium.HeadingPitchRange(yaw, pitch, 150)
   )
+
+  // Add text
+  document.getElementById('indice_text').innerHTML += ` ${indice.name},`
 
   // Delete indice in list
   indices_list.shift()

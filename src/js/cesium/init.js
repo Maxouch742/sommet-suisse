@@ -64,3 +64,76 @@ document
       }
     })
   })
+
+document.getElementById('indice').addEventListener('click', function () {
+  const yverdon = Cesium.Cartesian3.fromDegrees(6.64098, 46.77856, 435)
+
+  // Add Cone
+  const cone = viewer.entities.add({
+    position: yverdon,
+    cylinder: {
+      length: 500.0,
+      topRadius: 500,
+      bottomRadius: 1,
+      material: Cesium.Color.RED,
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+    }
+  })
+  // Add Cylinder
+  const cylinder = viewer.entities.add({
+    position: Cesium.Cartesian3.fromDegrees(6.64098, 46.77856, 435 + 700),
+    cylinder: {
+      length: 700.0,
+      topRadius: 300,
+      bottomRadius: 300,
+      material: Cesium.Color.RED
+    },
+    label: {
+      text: '.   Yverdon',
+      fillColor: Cesium.Color.WHITE,
+      horizontalOrigin: Cesium.HorizontalOrigin.LEFT
+    }
+  })
+
+  //------
+  // Define the positions of the two points in WGS84 (longitude, latitude, height)
+  const point1 = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude)
+  const point1_transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
+  const point2 = yverdon
+
+  // Calculate the direction vector from point1 to point2
+  var direction = Cesium.Cartesian3.subtract(
+    point1,
+    point2,
+    new Cesium.Cartesian3()
+  )
+  Cesium.Cartesian3.normalize(direction, direction)
+
+  // Calculate the yaw (heading), pitch, and roll angles
+  var transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
+  var quaternion = Cesium.Quaternion.fromRotationMatrix(
+    Cesium.Matrix4.getMatrix3(transform, new Cesium.Matrix3())
+  )
+  var inverseQuaternion = Cesium.Quaternion.inverse(
+    quaternion,
+    new Cesium.Quaternion()
+  )
+  var directionLocal = Cesium.Matrix3.multiplyByVector(
+    Cesium.Matrix3.fromQuaternion(inverseQuaternion),
+    direction,
+    new Cesium.Cartesian3()
+  )
+
+  var yaw = Math.atan2(directionLocal.y, directionLocal.x)
+  var pitch = Math.asin(directionLocal.z)
+  var roll = 0.0 // Roll is zero if we assume a flat terrain and no banking.
+
+  // Convert the angles from radians to degrees
+  //yaw = Cesium.Math.toDegrees(yaw)
+  //pitch = Cesium.Math.toDegrees(pitch)
+
+  viewer.scene.camera.lookAtTransform(
+    point1_transform,
+    new Cesium.HeadingPitchRange(yaw, pitch, 150)
+  )
+})

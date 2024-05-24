@@ -20,6 +20,7 @@ map = new ol.Map({
       code: 'EPSG:2056',
       units: 'm'
     }),
-    zoom: 8
+    zoom: 8,
+    maxZoom: 9.5
   })
 })

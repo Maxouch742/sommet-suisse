@@ -36,9 +36,16 @@ console.log('map')
 map.on('click', function (event) {
   const coords = event.coordinate
 
+  // Vider les features
+  const features = marker_source.getFeatures()
+  if (features.length >= 1) {
+    marker_source.clear()
+  }
+
   // Créer un marqueur à la position cliquée
   const marker = new ol.Feature({
-    geometry: new ol.geom.Point(coords)
+    geometry: new ol.geom.Point(coords),
+    id: 'marker'
   })
 
   // Définir une icône personnalisée (facultatif)

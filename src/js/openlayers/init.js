@@ -29,8 +29,8 @@ marker_source = new ol.source.Vector()
 marker_layer = new ol.layer.Vector({
   source: marker_source
 })
+marker_layer.setZIndex(1)
 map.addLayer(marker_layer)
-console.log('map')
 
 // Ajouter un gestionnaire d'événement pour les clics sur la carte
 map.on('click', function (event) {
@@ -44,9 +44,9 @@ map.on('click', function (event) {
 
   // Créer un marqueur à la position cliquée
   const marker = new ol.Feature({
-    geometry: new ol.geom.Point(coords),
-    id: 'marker'
+    geometry: new ol.geom.Point(coords)
   })
+  marker.setId('marker')
 
   // Définir une icône personnalisée (facultatif)
   marker.setStyle(
@@ -60,4 +60,7 @@ map.on('click', function (event) {
   )
   // Ajouter le marqueur à la source de vecteur
   marker_source.addFeature(marker)
+
+  // Activer le bouton
+  document.getElementById('validateSummit').disabled = false
 })

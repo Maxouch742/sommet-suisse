@@ -17,8 +17,11 @@
         <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
         <link href="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
+        <!-- dataTables -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
+
         <!-- Personal script -->
-        <link rel="stylesheet" href="src/style/style.css">
+        <link rel="stylesheet" href="src/style/style_index.css">
     </head>
 
     <body>
@@ -26,86 +29,40 @@
 
             <div class="row">
 
-                <!-- Côté gauche: Map, indices, ...-->
-                <div class="col-5">
-
-                    <!-- Header -->
-                    <div class="row">
-                        <div class="col-3">
-                            <img class="m-2" src="src/img/hesso.png" alt="Logo des Hautes Ecoles Spécialisés de Suisse Occidentale">
-                        </div>
-                        <div class="col-6">
-                            <p class="text-center fs-2 fw-bolder m-1">Sommets suisses</p>
-                        </div>
-                        <div class="col-3 d-flex justify-content-end">
-                            <img class="m-2" src="src/img/unige.png" alt="Logo de l'Université de Genève">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col text-center">
-                            <p class="fs-3 fw-bolder m-1 text-warning">Place le sommet suisse sur la carte !</p>
-                        </div>
-                    </div>
-                    <!-- ./ fin header -->
-
-                    <!-- Scores, indices, ... -->
-                    <div class="row mb-3">
-
-                        <!-- Header : name and score -->
-                        <div class="row border">
-                            <div class="col-6">
-                                <p class="fw-bolder fs-4">Nom: <span id="joueurName" class="fw-normal">TEST02</span></p>
-                            </div>
-                            <div class="col-6">
-                                <p class="fw-bolder fs-4">Score: <span id="joueurScore" class="fw-normal">0</span></p>
-                            </div>
-                        </div>
-                        <!-- ./ fin 'Header' -->
-
-                        <!-- Question et buttons -->
-                        <div class="row border">
-
-                            <!-- Questions -->
-                            <div class="col-8" id="questions_text">
-                                <p class="fw-bolder fs-3">Question n°<span id="questionNombre" class="fw-normal">2</span><span class="fw-normal">/12</span></p>
-                                <p class="fw-bolder fs-5">Votre réponse: <span id="reponse" class="fw-normal"></span></p>
-                                <p class="fw-bolder fs-5">Ecart: <span id="ecart" class="fw-normal">-</span><span class="fw-normal"></span></p>
-                                <p class="fw-bolder fs-5">Points: <span id="points" class="fw-normal"></span></p>
-                                <p class="fs-6 fst-italic" id="indice_text">Indice :</p>
-                            </div>
-                            <!-- /. fin 'Questions' -->
-
-                            <!-- Boutons -->
-                            <div class="col-4 text-center">
-                                <button type="button" id="indice" class="btn btn-secondary fw-bolder fs-5 m-2">Indice</button>
-                                <button type="button" id="validateSummit" class="btn btn-primary fw-bolder fs-5 m-2" disabled>Valider</button>
-                                <button type="button" id="buttonSuivant" class="btn btn-info fw-bolder fs-5 m-2" disabled>Suivante</button>
-                            </div>
-                        </div>
-                        <!-- ./ fin 'Questions et boutons' -->
-
-                        <!-- Indices -->
-                        <div class="row bolder" id="indiceText">
-                        </div>
-
-                    </div>
-                    <!-- ./ fin 'Scores, indices, ...' -->
-
-                    <!-- Map openlayers -->
-                    <div class="row">
-                        <div id="map" style="width:100%; height: 400px"></div>
-                    </div>
-                    <!-- /. fin 'Map openlayers' -->
-
+                <div class="col-3">
+                    <img class="m-2 img-home" src="src/img/hesso.png" alt="Logo des Hautes Ecoles Spécialisés de Suisse Occidentale">
                 </div>
-                <!-- ./ fin côté gauche -->
-
-                <!-- Côté droit: cesium -->
-                <div class="col-7">
-                    <div id="cesiumContainer" style="width: 100%; height: 100vh; margin: 0; padding: 0;"></div>
+                <div class="col-6">
+                    <p class="text-center fs-2 fw-bolder m-1">Sommets suisses</p>
+                </div>
+                <div class="col-3 d-flex justify-content-end">
+                    <img class="m-2 img-home" src="src/img/unige.png" alt="Logo de l'Université de Genève">
                 </div>
 
             </div>
+            <!-- ./ fin header -->
+
+            <div class="row m-2">
+                <p class="fs-3 fw-bolder">Détails</p>
+                <p class="fs-4">Le jeu est similaire à GeoGuessr, mais se concentre sur les montagnes en Suisse. Les joueurs doivent identifier la montagne depuis laquelle une vue 3D est prise. Ils peuvent naviguer dans la vue 3D et utiliser jusqu'à deux indices pour les aider. Une fois qu'ils pensent avoir identifié le sommet, ils cliquent sur une carte pour valider leur réponse.</p>
+            </div>
+
+            <div class="row ms-2 me-2">
+                <button type="button" class="btn btn-warning btn-lg fs-2 fw-bolder" href="game.html">JOUER</button>
+            </div>
+
+            <div class="row m-2">
+                <table id="tableScore" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         </div>
         <!-- ./ fin class="container" -->
         
@@ -116,12 +73,12 @@
         <!-- Bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-        <!-- Openlayers / proj4 -->
-        <script src="https://cdn.jsdelivr.net/npm/ol@v7.4.0/dist/ol.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.6.2/proj4.js" integrity="sha512-cgJnZ1VX2G0MAN4C5OGShwI3zHhfQ6RLriXuukhblNu+T082/ZRGoWLP/0xMKObvB6AUKdnm27hQKj8hKZPjXA==" crossorigin="anonymous"></script>
+        <!-- dataTables -->
+        <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
 
-        <!-- Global -->
-        <script src="src/js/main.js" type="module"></script>
+        <!-- Personal script -->
+        <script src="../src/js/index.js"></script>
+
     </body>
 
 </html>

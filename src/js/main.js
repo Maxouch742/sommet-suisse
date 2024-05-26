@@ -291,6 +291,25 @@ map.on('click', function (event) {
  *
  **********************************************************************/
 
+function computePoints (longueur) {
+  let points = parseFloat(document.getElementById('points').innerText)
+  const points_partie = (-0.1 * longueur) / 1000 + 50
+  points += points_partie
+
+  // check indice
+  if (indices_list.length == 1) {
+    points -= 10
+  }
+  if (indices_list.length == 0) {
+    points -= 10
+  }
+  if (points <= 10) {
+    points = 0
+  }
+
+  document.getElementById('points').innerText = points.toFixed(0)
+}
+
 document.getElementById('indice').addEventListener('click', function () {
   console.log(indices_list[0])
 
@@ -460,6 +479,12 @@ document
     document.getElementById('validateSummit').disabled = true
     document.getElementById('buttonSuivant').disabled = false
 
+    // Affiche le score et la réponse
+    document.getElementById('reponse').innerText =
+      feature_coord[0].toFixed(2) + ', ' + feature_coord[1].toFixed(2)
+    document.getElementById('ecart').innerText = lengthFormatted
+    computePoints(length)
+
     //------ Cesium
     // Add Cylinder
     const cylinder = viewer.entities.add({
@@ -488,6 +513,8 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
 
   //Delete feature on map3D
   viewer.entities.removeAll()
+  viewer.scene.primitives.removeAll()
+  displayBuildings(viewer)
 
   // Change summit
   // change label

@@ -1,0 +1,170 @@
+[
+    {
+        "name":"Chasseron",
+        "PFP1":{
+            "id": 11828147,
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001182_11828147.pdf"
+        },
+        "easting": 2531332.62,
+        "northing": 1189357.1,
+        "altitude": 1611.750,
+        "indices":[
+            {
+                "name": "Fleurier",
+                "easting": 2534720.0,
+                "northing": 1195221.0,
+                "altitude": 742.3
+            },
+            {
+                "name": "Yverdon",
+                "easting": 2539060.5,
+                "northing": 1181485.7,
+                "altitude": 434.8
+            }
+        ]
+    },
+    {
+        "name":"Suchet",
+        "PFP1":{
+            "id": "12025057",
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001202_12025057.pdf"
+        },
+        "easting":  2525730.870,
+        "northing": 1180594.325,
+        "altitude": 1592.100,
+        "indices":[
+            {
+                "name": "Rances",
+                "easting": 2530675.5,
+                "northing": 1179216.7,
+                "altitude": 558.9
+            },
+            {
+                "name": "Yverdon",
+                "easting": 2539060.5,
+                "northing": 1181485.7,
+                "altitude": 434.8
+            }
+        ]
+    },
+    {
+        "name":"Dole",
+        "PFP1":{
+            "id": "12608080",
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001260_12608080.pdf"
+        },
+        "easting":  2497073.140,
+        "northing": 1142440.400,
+        "altitude": 1677.240,
+        "indices":[
+            {
+                "name": "St-Cergue",
+                "easting": 2501788.0,
+                "northing": 1144926.0,
+                "altitude": 1004.2
+            },
+            {
+                "name":"Nyon",
+                "easting": 2507403.5,
+                "northing": 1137610.7,
+                "altitude": 402.7
+            }
+        ]
+    },
+    {
+        "name":"Rochers de Naye",
+        "PFP1":{
+            "id": 12647237,
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001264_12647237.pdf"
+        },
+        "easting":  2564443.727,
+        "northing": 1142379.696,
+        "altitude": 2046.630,
+        "indices":[
+            {
+                "name": "Villeneuve VD",
+                "easting": 2560648.2,
+                "northing": 1138693.8,
+                "altitude": 375.2
+            },
+            {
+                "name": "Glion",
+                "easting": 2561098.4,
+                "northing": 1142849.2,
+                "altitude": 820.1
+            }
+        ]
+    },
+    {
+        "name":"Moudon",
+        "PFP1":{
+            "id": 12238030,
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001223_12238030.pdf"
+        },
+        "easting":  2548674.280,
+        "northing": 1169048.090,
+        "altitude": 832.540,
+        "indices":[
+            {
+                "name":"Chapelle-sur-Moudon",
+                "easting": 2546344.0,
+                "northing": 1169109.2,
+                "altitude": 772.4
+            },
+            {
+                "name":"Moudon",
+                "easting": 2551326.5,
+                "northing": 1168735.9,
+                "altitude": 509.9
+            }
+        ]
+    },
+    {
+        "name":"Moléson",
+        "PFP1":{
+            "id": 12450100,
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001245_12450100.pdf"
+        },
+        "easting":  2567669.550,
+        "northing": 1155365.570,
+        "altitude": 2002.350,
+        "indices":[
+            {
+                "name":"Châtel-St-Denis",
+                "easting": 2558329.8,
+                "northing": 1153084.6,
+                "altitude": 802.9
+            },
+            {
+                "name": "Bulle",
+                "easting": 2570412.0,
+                "northing": 1163172.0,
+                "altitude": 771.0
+            }
+        ]
+    },
+    {
+        "name":"Vully",
+        "PFP1":{
+            "id": 1165316,
+            "link":"https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001165_11653160.pdf"
+        },
+        "easting":  2573767.970,
+        "northing": 1201490.591,
+        "altitude": 653.220,
+        "indices":[
+            {
+                "name": "Ins",
+                "easting": 2574217.4,
+                "northing": 1205463.9,
+                "altitude": 436.7
+            },
+            {
+                "name": "Morat",
+                "easting": 2575368.4,
+                "northing": 1197147.3,
+                "altitude": 448.5
+            }
+        ]
+    }
+]

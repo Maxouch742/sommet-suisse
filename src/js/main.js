@@ -292,22 +292,23 @@ map.on('click', function (event) {
  **********************************************************************/
 
 function computePoints (longueur) {
-  let points = parseFloat(document.getElementById('points').innerText)
-  const points_partie = (-0.1 * longueur) / 1000 + 50
-  points += points_partie
+  let points = parseFloat(document.getElementById('joueurScore').innerText)
+  let points_partie = (-0.1 * longueur) / 1000 + 50
 
   // check indice
   if (indices_list.length == 1) {
-    points -= 10
+    points_partie -= 10
   }
   if (indices_list.length == 0) {
-    points -= 10
+    points_partie -= 10
   }
   if (points <= 10) {
-    points = 0
+    points_partie = 0
   }
 
-  document.getElementById('points').innerText = points.toFixed(0)
+  document.getElementById('points').innerText = points_partie.toFixed(0)
+  points += points_partie
+  document.getElementById('joueurScore').innerText = points.toFixed(0)
 }
 
 document.getElementById('indice').addEventListener('click', function () {

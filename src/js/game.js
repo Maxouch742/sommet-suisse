@@ -322,7 +322,9 @@ function incrementNumber () {
 async function fetchJSON () {
   try {
     // Utilise fetch pour récupérer le fichier JSON
-    const response = await fetch('../src/summit.json')
+    const response = await fetch(
+      'https://maxouch742.github.io/sommet-suisse/src/summit.json'
+    )
 
     // Vérifie si la requête a réussi
     if (!response.ok) {

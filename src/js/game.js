@@ -611,6 +611,15 @@ document
   })
 
 document.getElementById('buttonSuivant').addEventListener('click', function () {
+  if (document.getElementById('buttonSuivant').innerText === 'Fin') {
+    const points = document.getElementById('joueurScore').innerText
+    alert(`Vous avez terminé ! Votre score est de ${points} points`)
+    //TODO : écrire le résultat dans le fichier
+
+    // Retourner au menu home
+    window.location.href = '../index.html'
+  }
+
   // Delete features on map openlayers
   const features_ol = marker_source.getFeatures()
   features_ol.forEach(feature => {
@@ -663,6 +672,11 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
       document.getElementById('validateSummit').disabled = false
       document.getElementById('buttonSuivant').disabled = true
       incrementNumber()
+
+      // si le numero de la question est 4, alors on change le button de fin du jeu
+      if (document.getElementById('questionNombre').innerText === '4') {
+        document.getElementById('buttonSuivant').innerText = 'Fin'
+      }
     }
   )
 })

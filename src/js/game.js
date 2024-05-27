@@ -199,6 +199,9 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 // Blocage de la distance maximale pour éviter de trop dézoomer
 viewer.scene.screenSpaceCameraController.maximumZoomDistance = 6378
 
+// IMPORTANT: batiment invisble à travers le terrain
+viewer.scene.globe.depthTestAgainstTerrain = true
+
 displayBuildings(viewer)
 //lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
 //showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
@@ -271,7 +274,7 @@ map.on('click', function (event) {
   marker.setStyle(
     new ol.style.Style({
       image: new ol.style.Icon({
-        src: '../src/img/marker.svg',
+        src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
         scale: 0.08,
         anchor: [0.5, 0.9]
       })
@@ -386,7 +389,7 @@ async function fetchREFRAME (easting, northing, altitude) {
 
 function computePoints (longueur) {
   let points = parseFloat(document.getElementById('joueurScore').innerText)
-  let points_partie = (-50 * longueur) / 1000 + 50
+  let points_partie = -0.1 * (longueur / 1000) + 50
 
   // check indice
   if (indices_list.length == 1) {
@@ -568,7 +571,7 @@ document
     feature_vrai.setStyle(
       new ol.style.Style({
         image: new ol.style.Icon({
-          src: '../src/img/marker.svg',
+          src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
           scale: 0.08,
           anchor: [0.5, 0.9],
           color: '#000000'
@@ -614,7 +617,8 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   if (document.getElementById('buttonSuivant').innerText === 'Fin') {
     const points = document.getElementById('joueurScore').innerText
     alert(`Vous avez terminé ! Votre score est de ${points} points`)
-    //TODO : écrire le résultat dans le fichier
+
+    // Ecrire le résultat dans le fichier
 
     // Retourner au menu home
     window.location.href = '../index.html'
@@ -635,6 +639,11 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   document.getElementById('points').innerText = ''
   document.getElementById('reponse').innerText = ''
   document.getElementById('ecart').innerText = ''
+
+  // si le numero de la question est 4, alors on change le button de fin du jeu
+  if (document.getElementById('questionNombre').innerText === '4') {
+    document.getElementById('buttonSuivant').innerText = 'Fin'
+  }
 
   // Afficher le nouveau sommet
   summits.shift()
@@ -672,11 +681,6 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
       document.getElementById('validateSummit').disabled = false
       document.getElementById('buttonSuivant').disabled = true
       incrementNumber()
-
-      // si le numero de la question est 4, alors on change le button de fin du jeu
-      if (document.getElementById('questionNombre').innerText === '4') {
-        document.getElementById('buttonSuivant').innerText = 'Fin'
-      }
     }
   )
 })

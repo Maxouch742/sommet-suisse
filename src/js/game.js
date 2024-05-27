@@ -312,6 +312,12 @@ function input_username () {
   return username
 }
 
+function incrementNumber () {
+  let numb = parseFloat(document.getElementById('questionNombre').innerText)
+  numb += 1
+  document.getElementById('questionNombre').innerText = numb
+}
+
 // Fonction pour lire le fichier JSON et retourner les données
 async function fetchJSON () {
   try {
@@ -386,9 +392,6 @@ function computePoints (longueur) {
   }
   if (indices_list.length == 0) {
     points_partie -= 10
-  }
-  if (points <= 10) {
-    points_partie = 0
   }
 
   document.getElementById('points').innerText = points_partie.toFixed(0)
@@ -495,14 +498,13 @@ document.getElementById('indice').addEventListener('click', function () {
       // Add text
       document.getElementById('indice_text').innerHTML += ` ${indice.name},`
 
-      // Delete indice in list
+      // Delete first indice in list
       indices_list.shift()
       // Disabled button
       if (indices_list.length < 1) {
         const button_indice = document.getElementById('indice')
         button_indice.disabled = true
       }
-      console.log(indices_list)
     }
   )
 })
@@ -618,9 +620,49 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   viewer.scene.primitives.removeAll()
   displayBuildings(viewer)
 
-  // Change summit
-  // change label
-  //
+  //Delete texte
+  document.getElementById('points').innerText = ''
+  document.getElementById('reponse').innerText = ''
+  document.getElementById('ecart').innerText = ''
+
+  // Afficher le nouveau sommet
+  summits.shift()
+  summit = summits[0]
+  indices_list = summit.indices
+
+  // convert data
+  fetchREFRAME(summit.easting, summit.northing, summit.altitude).then(
+    response => {
+      const position_summit = response
+
+      // Ajout des coordonnées dans l'Objet lié au sommet
+      summit.latitude = position_summit.latitude
+      summit.longitude = position_summit.longitude
+      summit.altitude = position_summit.altitude
+
+      // Show summit
+      lookAtSummit(
+        viewer,
+        position_summit.longitude,
+        position_summit.latitude,
+        position_summit.altitude,
+        summit.name
+      )
+      showPyramid(
+        viewer,
+        position_summit.longitude,
+        position_summit.latitude,
+        position_summit.altitude,
+        summit.name
+      )
+
+      // Enabled button
+      document.getElementById('indice').disabled = false
+      document.getElementById('validateSummit').disabled = false
+      document.getElementById('buttonSuivant').disabled = true
+      incrementNumber()
+    }
+  )
 })
 
 // Dès que la page est chargée
@@ -659,6 +701,9 @@ document.addEventListener('DOMContentLoaded', function () {
             position_summit.altitude,
             summit.name
           )
+
+          // increment question
+          incrementNumber()
         }
       )
     })

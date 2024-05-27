@@ -369,8 +369,8 @@ async function fetchREFRAME (easting, northing, altitude) {
   )
 
   const response = {
-    latitude: parseFloat(wgs84.easting),
-    longitude: parseFloat(wgs84.northing),
+    longitude: parseFloat(wgs84.easting),
+    latitude: parseFloat(wgs84.northing),
     altitude: parseFloat(wgs84.altitude)
   }
   return response
@@ -401,95 +401,113 @@ document.getElementById('indice').addEventListener('click', function () {
 
   const indice = indices_list[0]
 
-  const indice_point = Cesium.Cartesian3.fromDegrees(
-    indice.longitude,
-    indice.latitude,
-    indice.altitude
-  )
+  // Convert coordinates
+  fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
+    response => {
+      const position_indice = response
+      indice.longitude = position_indice.longitude
+      indice.latitude = position_indice.latitude
+      indice.altitude = position_indice.altitude
 
-  // Add Symbol
-  const cone = viewer.entities.add({
-    position: indice_point,
-    cylinder: {
-      length: 500.0,
-      topRadius: 500,
-      bottomRadius: 1,
-      material: Cesium.Color.RED,
-      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+      const indice_point = Cesium.Cartesian3.fromDegrees(
+        indice.longitude,
+        indice.latitude,
+        indice.altitude
+      )
+      console.log('POINT :', indice_point)
+
+      // Add Symbol
+      const cone = viewer.entities.add({
+        position: indice_point,
+        cylinder: {
+          length: 500.0,
+          topRadius: 500,
+          bottomRadius: 1,
+          material: Cesium.Color.RED,
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+        }
+      })
+      const cylinder = viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(
+          indice.longitude,
+          indice.latitude,
+          indice.altitude + 700
+        ),
+        cylinder: {
+          length: 700.0,
+          topRadius: 300,
+          bottomRadius: 300,
+          material: Cesium.Color.RED
+        },
+        label: {
+          text: `.    ${indice.name}`,
+          fillColor: Cesium.Color.WHITE,
+          horizontalOrigin: Cesium.HorizontalOrigin.LEFT
+        }
+      })
+
+      /*
+
+      // Define the positions of the two points in WGS84 (longitude, latitude, height)
+      const point1 = Cesium.Cartesian3.fromDegrees(
+        summit.longitude,
+        summit.latitude,
+        summit.altitude
+      )
+      const point1_transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
+
+      // Calculate the direction vector from point1 to point2
+      const direction = Cesium.Cartesian3.subtract(
+        point1,
+        indice_point,
+        new Cesium.Cartesian3()
+      )
+      Cesium.Cartesian3.normalize(direction, direction)
+
+      // Calculate the yaw (heading), pitch, and roll angles
+      const transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
+      const quaternion = Cesium.Quaternion.fromRotationMatrix(
+        Cesium.Matrix4.getMatrix3(transform, new Cesium.Matrix3())
+      )
+      const inverseQuaternion = Cesium.Quaternion.inverse(
+        quaternion,
+        new Cesium.Quaternion()
+      )
+      const directionLocal = Cesium.Matrix3.multiplyByVector(
+        Cesium.Matrix3.fromQuaternion(inverseQuaternion),
+        direction,
+        new Cesium.Cartesian3()
+      )
+
+      let yaw = Math.atan2(directionLocal.y, directionLocal.x)
+      yaw = Cesium.Math.toDegrees(yaw)
+      let pitch = Math.asin(directionLocal.z)
+
+      console.log(yaw)
+      console.log(Cesium.Math.toRadians(yaw))
+      if (yaw < 0) {
+        yaw = 2 * Math.PI + yaw
+      }
+
+      viewer.scene.camera.lookAtTransform(
+        point1_transform,
+        new Cesium.HeadingPitchRange(yaw, pitch, 150)
+      )
+      */
+
+      // Add text
+      document.getElementById('indice_text').innerHTML += ` ${indice.name},`
+
+      // Delete indice in list
+      indices_list.shift()
+      // Disabled button
+      if (indices_list.length < 1) {
+        const button_indice = document.getElementById('indice')
+        button_indice.disabled = true
+      }
+      console.log(indices_list)
     }
-  })
-  const cylinder = viewer.entities.add({
-    position: Cesium.Cartesian3.fromDegrees(
-      indice.longitude,
-      indice.latitude,
-      indice.altitude + 700
-    ),
-    cylinder: {
-      length: 700.0,
-      topRadius: 300,
-      bottomRadius: 300,
-      material: Cesium.Color.RED
-    },
-    label: {
-      text: `.    ${indice.name}`,
-      fillColor: Cesium.Color.WHITE,
-      horizontalOrigin: Cesium.HorizontalOrigin.LEFT
-    }
-  })
-
-  // Define the positions of the two points in WGS84 (longitude, latitude, height)
-  const point1 = Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude)
-  const point1_transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
-
-  // Calculate the direction vector from point1 to point2
-  const direction = Cesium.Cartesian3.subtract(
-    point1,
-    indice_point,
-    new Cesium.Cartesian3()
   )
-  Cesium.Cartesian3.normalize(direction, direction)
-
-  // Calculate the yaw (heading), pitch, and roll angles
-  const transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
-  const quaternion = Cesium.Quaternion.fromRotationMatrix(
-    Cesium.Matrix4.getMatrix3(transform, new Cesium.Matrix3())
-  )
-  const inverseQuaternion = Cesium.Quaternion.inverse(
-    quaternion,
-    new Cesium.Quaternion()
-  )
-  const directionLocal = Cesium.Matrix3.multiplyByVector(
-    Cesium.Matrix3.fromQuaternion(inverseQuaternion),
-    direction,
-    new Cesium.Cartesian3()
-  )
-
-  let yaw = Math.atan2(directionLocal.y, directionLocal.x)
-  yaw = Cesium.Math.toDegrees(yaw)
-  let pitch = Math.asin(directionLocal.z)
-
-  console.log(yaw)
-  console.log(Cesium.Math.toRadians(yaw))
-  if (yaw < 0) {
-    yaw = 2 * Math.PI + yaw
-  }
-
-  viewer.scene.camera.lookAtTransform(
-    point1_transform,
-    new Cesium.HeadingPitchRange(yaw, pitch, 150)
-  )
-
-  // Add text
-  document.getElementById('indice_text').innerHTML += ` ${indice.name},`
-
-  // Delete indice in list
-  indices_list.shift()
-  // Disabled button
-  if (indices_list.length < 1) {
-    const button_indice = document.getElementById('indice')
-    button_indice.disabled = true
-  }
-  console.log(indices_list)
 })
 
 document
@@ -624,18 +642,23 @@ document.addEventListener('DOMContentLoaded', function () {
         response => {
           const position_summit = response
 
+          // Ajout des coordonnées dans l'Objet lié au sommet
+          summit.latitude = position_summit.latitude
+          summit.longitude = position_summit.longitude
+          summit.altitude = position_summit.altitude
+
           // Show summit
           lookAtSummit(
             viewer,
-            position_summit.latitude,
             position_summit.longitude,
+            position_summit.latitude,
             position_summit.altitude,
             summit.name
           )
           showPyramid(
             viewer,
-            position_summit.latitude,
             position_summit.longitude,
+            position_summit.latitude,
             position_summit.altitude,
             summit.name
           )

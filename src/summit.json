@@ -13,7 +13,14 @@
                 "name": "Fleurier",
                 "easting": 2534720.0,
                 "northing": 1195221.0,
-                "altitude": 742.3
+                "altitude": 742.3,
+                "description":{
+                    "canton": "VD",
+                    "district": "Jura-Nord vaudois",
+                    "syndic": "Pierre Dessemontet",
+                    "NPA": 1400,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:CHE_Yverdon-les-Bains_VD_COA.svg?uselang=fr"
+                }
             },
             {
                 "name": "Yverdon",

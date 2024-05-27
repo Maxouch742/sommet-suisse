@@ -8,6 +8,8 @@ let summits = []
 let summit = {}
 let indices_list = []
 
+let click_on_map = true
+
 /*let indices_list = [
   {
     name: 'Fleurier',
@@ -256,35 +258,37 @@ map.addLayer(marker_layer)
 
 // Gestionnaire d'événement liée à la carte OpenLayers
 map.on('click', function (event) {
-  const coords = event.coordinate
+  if (click_on_map === true) {
+    const coords = event.coordinate
 
-  // Vider les features
-  const features = marker_source.getFeatures()
-  if (features.length >= 1) {
-    marker_source.clear()
-  }
+    // Vider les features
+    const features = marker_source.getFeatures()
+    if (features.length >= 1) {
+      marker_source.clear()
+    }
 
-  // Créer un marqueur à la position cliquée
-  const marker = new ol.Feature({
-    geometry: new ol.geom.Point(coords)
-  })
-  marker.setId('marker')
-
-  // Définir une icône personnalisée (facultatif)
-  marker.setStyle(
-    new ol.style.Style({
-      image: new ol.style.Icon({
-        src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
-        scale: 0.08,
-        anchor: [0.5, 0.9]
-      })
+    // Créer un marqueur à la position cliquée
+    const marker = new ol.Feature({
+      geometry: new ol.geom.Point(coords)
     })
-  )
-  // Ajouter le marqueur à la source de vecteur
-  marker_source.addFeature(marker)
+    marker.setId('marker')
 
-  // Activer le bouton
-  document.getElementById('validateSummit').disabled = false
+    // Définir une icône personnalisée (facultatif)
+    marker.setStyle(
+      new ol.style.Style({
+        image: new ol.style.Icon({
+          src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
+          scale: 0.08,
+          anchor: [0.5, 0.9]
+        })
+      })
+    )
+    // Ajouter le marqueur à la source de vecteur
+    marker_source.addFeature(marker)
+
+    // Activer le bouton
+    document.getElementById('validateSummit').disabled = false
+  }
 })
 
 /***********************************************************************
@@ -319,6 +323,10 @@ function incrementNumber () {
   let numb = parseFloat(document.getElementById('questionNombre').innerText)
   numb += 1
   document.getElementById('questionNombre').innerText = numb
+}
+
+function createDescription (indice) {
+  console.log('DESCRIPTION:', indice)
 }
 
 // Fonction pour lire le fichier JSON et retourner les données
@@ -451,7 +459,9 @@ document.getElementById('indice').addEventListener('click', function () {
           text: `.    ${indice.name}`,
           fillColor: Cesium.Color.WHITE,
           horizontalOrigin: Cesium.HorizontalOrigin.LEFT
-        }
+        },
+        name: indice.name,
+        description: createDescription(indice)
       })
 
       // Define the positions of the two points in WGS84 (longitude, latitude, height)
@@ -570,6 +580,17 @@ document
     })
     feature_vrai.setStyle(
       new ol.style.Style({
+        text: new ol.style.Text({
+          text: summit.name,
+          font: '16px Calibri,sans-serif',
+          fill: new ol.style.Fill({
+            color: '#000'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#000',
+            width: 1
+          })
+        }),
         image: new ol.style.Icon({
           src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
           scale: 0.08,
@@ -587,6 +608,8 @@ document
     document.getElementById('indice').disabled = true
     document.getElementById('validateSummit').disabled = true
     document.getElementById('buttonSuivant').disabled = false
+
+    click_on_map = false
 
     // Affiche le score et la réponse
     document.getElementById('reponse').innerText =
@@ -619,7 +642,8 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
     alert(`Vous avez terminé ! Votre score est de ${points} points`)
 
     // Retourner au menu home
-    window.location.href = '../index.html'
+    window.location.href =
+      'https://maxouch742.github.io/sommet-suisse/index.html'
   }
 
   // Delete features on map openlayers
@@ -642,6 +666,8 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   if (document.getElementById('questionNombre').innerText === '4') {
     document.getElementById('buttonSuivant').innerText = 'Fin'
   }
+
+  click_on_map = true
 
   // Afficher le nouveau sommet
   summits.shift()

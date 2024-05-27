@@ -1,8 +1,12 @@
+let username = 'Anonyme'
+
 const longitude = 6.538256684
 const latitude = 46.851793418
 const altitude = 1662.2
 
-let indices_list = [
+let indices_list = []
+
+/*let indices_list = [
   {
     name: 'Fleurier',
     longitude: 6.58132,
@@ -15,7 +19,7 @@ let indices_list = [
     latitude: 46.77856,
     altitude: 435
   }
-]
+]*/
 
 /***********************************************************************
  *
@@ -306,6 +310,29 @@ function input_username () {
   return username
 }
 
+// Fonction pour lire le fichier JSON et retourner les données
+async function fetchJSON () {
+  try {
+    // Utilise fetch pour récupérer le fichier JSON
+    const response = await fetch('../src/summit.json')
+
+    // Vérifie si la requête a réussi
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText)
+    }
+
+    // Convertit la réponse en objet JavaScript
+    const data = await response.json()
+
+    // Retourne les données
+    return data
+  } catch (error) {
+    // Gère les erreurs éventuelles
+    console.error('There has been a problem with your fetch operation:', error)
+    throw error
+  }
+}
+
 function computePoints (longueur) {
   let points = parseFloat(document.getElementById('joueurScore').innerText)
   let points_partie = (-0.1 * longueur) / 1000 + 50
@@ -538,8 +565,15 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
 })
 
 // Dès que la page est chargée
-document.addEventListener('load', function () {
+document.addEventListener('DOMContentLoaded', function () {
   input_username()
 
-  //TODO: charger le fichier des sommets
+  // Charger le fichier de sommets
+  fetchJSON()
+    .then(data => {
+      indices_list = data
+    })
+    .catch(error => {
+      console.error('Fetch JSON failed:', error)
+    })
 })

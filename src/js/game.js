@@ -327,6 +327,7 @@ function incrementNumber () {
 
 function createDescription (indice) {
   console.log('DESCRIPTION:', indice)
+  console.log('DESCRIPTION 2', indice.description)
 }
 
 // Fonction pour lire le fichier JSON et retourner les données

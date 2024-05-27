@@ -618,8 +618,6 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
     const points = document.getElementById('joueurScore').innerText
     alert(`Vous avez terminé ! Votre score est de ${points} points`)
 
-    // Ecrire le résultat dans le fichier
-
     // Retourner au menu home
     window.location.href = '../index.html'
   }

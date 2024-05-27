@@ -4,6 +4,7 @@ $(document).ready(function () {
       url: 'https://maxouch742.github.io/sommet-suisse/src/score.json',
       dataSrc: ''
     },
-    columns: [{ data: 'nom' }, { data: 'score' }, { data: 'date' }]
+    columns: [{ data: 'nom' }, { data: 'score' }, { data: 'date' }],
+    order: [[1, 'desc']]
   })
 })

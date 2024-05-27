@@ -331,21 +331,34 @@ function createDescription (indice) {
   if (indice.description != undefined) {
     console.log('DESCRIPTION 2', indice.description)
 
-    const table = `<table class='table table-bordered table-dark table-striped .bg-black'>
+    let table = `<table class='table table-bordered table-dark table-striped .bg-black'>
         <thead><tr>
           <th scope="col">Item</th><th scope="col">Description</th>
         </tr></thead>
         <tbody>
           <tr>
             <td>Canton :</td><td>${indice.description.canton}</td>
-          </tr>
-          <tr>
-            <td>District :</td><td>${indice.description.district}</td>
-          </tr>
-          <tr>
-            <td>Syndic :</td><td>${indice.description.syndic}</td>
-          </tr>
-          <tr>
+          </tr>`
+
+    if (indice.description.region != undefined) {
+      table += `<tr>
+      <td>Région :</td><td>${indice.description.region}</td>
+    </tr>`
+    } else {
+      table += `<tr>
+      <td>District :</td><td>${indice.description.district}</td>
+    </tr>`
+    }
+
+    if (indice.description.syndic != undefined) {
+      table += `<tr><td>Syndic :</td><td>${indice.description.syndic}</td></tr>`
+    } else if (indice.description.maire != undefined) {
+      table += `<tr><td>Maire :</td><td>${indice.description.maire}</td></tr>`
+    } else if (indice.description.president != undefined) {
+      table += `<tr><td>Président :</td><td>${indice.description.president}</td></tr>`
+    }
+
+    table += `<tr>
             <td>NPA :</td><td>${indice.description.NPA}</td>
           </tr>
           <tr>
@@ -628,7 +641,6 @@ document
     document.getElementById('indice').disabled = true
     document.getElementById('validateSummit').disabled = true
     document.getElementById('buttonSuivant').disabled = false
-    document.getElementById('indice_text').innerText = 'Indice :'
 
     click_on_map = false
 
@@ -683,6 +695,10 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   document.getElementById('reponse').innerText = ''
   document.getElementById('ecart').innerText = ''
 
+  document.getElementById('indice_text').innerText = 'Indice :'
+
+  map.getView().setMaxZoom(8)
+
   // si le numero de la question est 4, alors on change le button de fin du jeu
   if (document.getElementById('questionNombre').innerText === '4') {
     document.getElementById('buttonSuivant').innerText = 'Fin'
@@ -694,6 +710,12 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   summits.shift()
   summit = summits[0]
   indices_list = summit.indices
+
+  // Enabled button
+  document.getElementById('indice').disabled = false
+  document.getElementById('validateSummit').disabled = false
+  document.getElementById('buttonSuivant').disabled = true
+  incrementNumber()
 
   // convert data
   fetchREFRAME(summit.easting, summit.northing, summit.altitude).then(
@@ -720,12 +742,6 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
         position_summit.altitude,
         summit.name
       )
-
-      // Enabled button
-      document.getElementById('indice').disabled = false
-      document.getElementById('validateSummit').disabled = false
-      document.getElementById('buttonSuivant').disabled = true
-      incrementNumber()
     }
   )
 })

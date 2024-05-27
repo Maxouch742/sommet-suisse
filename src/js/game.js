@@ -4,6 +4,8 @@ const longitude = 6.538256684
 const latitude = 46.851793418
 const altitude = 1662.2
 
+let summits = []
+let summit = {}
 let indices_list = []
 
 /*let indices_list = [
@@ -198,8 +200,8 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
 viewer.scene.screenSpaceCameraController.maximumZoomDistance = 6378
 
 displayBuildings(viewer)
-lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
-showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
+//lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
+//showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
 
 /***********************************************************************
  *
@@ -333,6 +335,47 @@ async function fetchJSON () {
   }
 }
 
+async function mn95ToWgs84 (east, north, altitude) {
+  const response = await fetch(
+    `https://geodesy.geo.admin.ch/reframe/lv95towgs84?easting=${east}&northing=${north}&altitude=${altitude}&format=json`,
+    {
+      method: 'GET'
+    }
+  )
+  const result = await response.json()
+  return result
+}
+
+async function nf02ToBessel (east, north, altitude) {
+  const response = await fetch(
+    `https://geodesy.geo.admin.ch/reframe/ln02tobessel?easting=${east}&northing=${north}&altitude=${altitude}&format=json`,
+    {
+      method: 'GET'
+    }
+  )
+  const result = await response.json()
+  return result
+}
+
+async function fetchREFRAME (easting, northing, altitude) {
+  // NF02 to Bessel
+  const height_bessel = await nf02ToBessel(easting, northing, altitude)
+
+  // MN95 to WGS84
+  const wgs84 = await mn95ToWgs84(
+    easting,
+    northing,
+    parseFloat(height_bessel.altitude)
+  )
+
+  const response = {
+    latitude: parseFloat(wgs84.easting),
+    longitude: parseFloat(wgs84.northing),
+    altitude: parseFloat(wgs84.altitude)
+  }
+  return response
+}
+
 function computePoints (longueur) {
   let points = parseFloat(document.getElementById('joueurScore').innerText)
   let points_partie = (-0.1 * longueur) / 1000 + 50
@@ -354,9 +397,10 @@ function computePoints (longueur) {
 }
 
 document.getElementById('indice').addEventListener('click', function () {
-  console.log(indices_list[0])
+  console.log('INDICE :', indices_list[0])
 
   const indice = indices_list[0]
+
   const indice_point = Cesium.Cartesian3.fromDegrees(
     indice.longitude,
     indice.latitude,
@@ -571,7 +615,32 @@ document.addEventListener('DOMContentLoaded', function () {
   // Charger le fichier de sommets
   fetchJSON()
     .then(data => {
-      indices_list = data
+      summits = data
+      summit = summits[0]
+      indices_list = summit.indices
+
+      // convert data
+      fetchREFRAME(summit.easting, summit.northing, summit.altitude).then(
+        response => {
+          const position_summit = response
+
+          // Show summit
+          lookAtSummit(
+            viewer,
+            position_summit.latitude,
+            position_summit.longitude,
+            position_summit.altitude,
+            summit.name
+          )
+          showPyramid(
+            viewer,
+            position_summit.latitude,
+            position_summit.longitude,
+            position_summit.altitude,
+            summit.name
+          )
+        }
+      )
     })
     .catch(error => {
       console.error('Fetch JSON failed:', error)

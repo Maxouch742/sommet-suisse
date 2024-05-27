@@ -446,8 +446,6 @@ document.getElementById('indice').addEventListener('click', function () {
         }
       })
 
-      /*
-
       // Define the positions of the two points in WGS84 (longitude, latitude, height)
       const point1 = Cesium.Cartesian3.fromDegrees(
         summit.longitude,
@@ -493,7 +491,6 @@ document.getElementById('indice').addEventListener('click', function () {
         point1_transform,
         new Cesium.HeadingPitchRange(yaw, pitch, 150)
       )
-      */
 
       // Add text
       document.getElementById('indice_text').innerHTML += ` ${indice.name},`

@@ -293,14 +293,14 @@ map.on('click', function (event) {
 
 /***********************************************************************
  *
- * MM     MM  AAAAAAAAA  III NN     NN
- * MMM   MMM  AAAAAAAAA  III NNN    NN
- * MM MMM MM  AA     AA  III NNN    NN
- * MM  M  MM  AA     AA  III NN N   NN
- * MM     MM  AAAAAAAAA  III NN  N  NN
- * MM     MM  AA     AA  III NN   N NN
- * MM     MM  AA     AA  III NN    NNN
- * MM     MM  AA     AA  III NN     NN
+ * MM     MM  AAAAAAAAA  III  NN     NN
+ * MMM   MMM  AAAAAAAAA  III  NNN    NN
+ * MM MMM MM  AA     AA  III  NNN    NN
+ * MM  M  MM  AA     AA  III  NN N   NN
+ * MM     MM  AAAAAAAAA  III  NN  N  NN
+ * MM     MM  AA     AA  III  NN   N NN
+ * MM     MM  AA     AA  III  NN    NNN
+ * MM     MM  AA     AA  III  NN     NN
  *
  **********************************************************************/
 
@@ -331,25 +331,25 @@ function createDescription (indice) {
   if (indice.description != undefined) {
     console.log('DESCRIPTION 2', indice.description)
 
-    const table = `<table class='table table-bordered table-dark table-striped'>
+    const table = `<table class='table table-bordered table-dark table-striped .bg-black'>
         <thead><tr>
           <th scope="col">Item</th><th scope="col">Description</th>
         </tr></thead>
         <tbody>
           <tr>
-            <td>Canton</td><td>${indice.description.canton}</td>
+            <td>Canton :</td><td>${indice.description.canton}</td>
           </tr>
           <tr>
-            <td>District</td><td>${indice.description.district}</td>
+            <td>District :</td><td>${indice.description.district}</td>
           </tr>
           <tr>
-            <td>Syndic</td><td>${indice.description.syndic}</td>
+            <td>Syndic :</td><td>${indice.description.syndic}</td>
           </tr>
           <tr>
-            <td>NPA</td><td>${indice.description.NPA}</td>
+            <td>NPA :</td><td>${indice.description.NPA}</td>
           </tr>
           <tr>
-            <td>Armoiries</td><td><a href="${indice.description.armoiries}" target='_blank'>link</a></td>
+            <td>Armoirie :</td><td><a href="${indice.description.armoiries}" target='_blank'>link</a></td>
           </tr>
         </tbody>
       </table>`
@@ -479,11 +479,6 @@ document.getElementById('indice').addEventListener('click', function () {
           topRadius: 300,
           bottomRadius: 300,
           material: Cesium.Color.RED
-        },
-        label: {
-          text: `.    ${indice.name}`,
-          fillColor: Cesium.Color.WHITE,
-          horizontalOrigin: Cesium.HorizontalOrigin.LEFT
         },
         name: indice.name,
         description: createDescription(indice)
@@ -633,6 +628,7 @@ document
     document.getElementById('indice').disabled = true
     document.getElementById('validateSummit').disabled = true
     document.getElementById('buttonSuivant').disabled = false
+    document.getElementById('indice_text').innerText = 'Indice :'
 
     click_on_map = false
 

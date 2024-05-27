@@ -13,7 +13,14 @@
                 "name": "Fleurier",
                 "easting": 2534720.0,
                 "northing": 1195221.0,
-                "altitude": 742.3
+                "altitude": 742.3,
+                "description":{
+                    "canton": "Neuchâtel",
+                    "region":"Val-de-Travers",
+                    "president": "Éric Sivignon",
+                    "NPA":2114,
+                    "armoiries":"https://commons.wikimedia.org/wiki/File:Fleurier.gif?uselang=fr"
+                }
             },
             {
                 "name": "Yverdon",
@@ -21,7 +28,7 @@
                 "northing": 1181485.7,
                 "altitude": 434.8,
                 "description":{
-                    "canton": "VD",
+                    "canton": "Vaud",
                     "district": "Jura-Nord vaudois",
                     "syndic": "Pierre Dessemontet",
                     "NPA": 1400,
@@ -44,13 +51,27 @@
                 "name": "Rances",
                 "easting": 2530675.5,
                 "northing": 1179216.7,
-                "altitude": 558.9
+                "altitude": 558.9,
+                "description": {
+                    "canton": "Vaud",
+                    "district": "Jura-Nord vaudois",
+                    "syndic": "Alcide Pisler",
+                    "NPA": 1439,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Rances-coat_of_arms.svg?uselang=fr"
+                }
             },
             {
                 "name": "Yverdon",
                 "easting": 2539060.5,
                 "northing": 1181485.7,
-                "altitude": 434.8
+                "altitude": 434.8,
+                "description":{
+                    "canton": "Vaud",
+                    "district": "Jura-Nord vaudois",
+                    "syndic": "Pierre Dessemontet",
+                    "NPA": 1400,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:CHE_Yverdon-les-Bains_VD_COA.svg?uselang=fr"
+                }
             }
         ]
     },
@@ -68,13 +89,27 @@
                 "name": "St-Cergue",
                 "easting": 2501788.0,
                 "northing": 1144926.0,
-                "altitude": 1004.2
+                "altitude": 1004.2,
+                "description": {
+                    "canton": "Vaud",
+                    "district": "Nyon",
+                    "syndic": "Paul Ménard",
+                    "NPA": 1264,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Saint-Cergue-coat_of_arms.svg?uselang=fr"
+                }
             },
             {
                 "name":"Nyon",
                 "easting": 2507403.5,
                 "northing": 1137610.7,
-                "altitude": 402.7
+                "altitude": 402.7,
+                "description": {
+                    "canton": "Vaud",
+                    "district": "Nyon",
+                    "syndic": "Daniel Rossellat",
+                    "NPA": 1260,
+                    "armoiries":"https://commons.wikimedia.org/wiki/File:CHE_Nyon_COA.svg?uselang=fr"
+                }
             }
         ]
     },
@@ -92,13 +127,27 @@
                 "name": "Villeneuve VD",
                 "easting": 2560648.2,
                 "northing": 1138693.8,
-                "altitude": 375.2
+                "altitude": 375.2,
+                "description":{
+                    "canton":"Vaud",
+                    "district":"Aigle",
+                    "syndic":"Corinne Ingold",
+                    "NPA": 1844,
+                    "armoiries":"https://commons.wikimedia.org/wiki/File:CHE_Villeneuve_COA.svg?uselang=fr"
+                }
             },
             {
                 "name": "Glion",
                 "easting": 2561098.4,
                 "northing": 1142849.2,
-                "altitude": 820.1
+                "altitude": 820.1,
+                "description":{
+                    "canton":"Vaud",
+                    "district":"Riviera-Pays-d'Enhaut",
+                    "syndic":"Olivier Gfeller",
+                    "NPA": 1823,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:CHE_Montreux_COA.svg?uselang=fr"
+                }
             }
         ]
     },
@@ -116,13 +165,27 @@
                 "name":"Chapelle-sur-Moudon",
                 "easting": 2546344.0,
                 "northing": 1169109.2,
-                "altitude": 772.4
+                "altitude": 772.4,
+                "description":{
+                    "canton": "Vaud",
+                    "district":"Gros-de-Vaud",
+                    "syndic":"Claude-Alain Cornu",
+                    "NPA": 1063,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Chapelle-sur-Moudon-coat_of_arms.svg?uselang=fr"
+                }
             },
             {
                 "name":"Moudon",
                 "easting": 2551326.5,
                 "northing": 1168735.9,
-                "altitude": 509.9
+                "altitude": 509.9,
+                "description": {
+                    "canton":"Vaud",
+                    "district": "Broye-Vully",
+                    "syndic": "Carole Pico",
+                    "NPA": 1510,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Moudon-coat_of_arms.svg?uselang=fr"
+                }
             }
         ]
     },
@@ -140,13 +203,27 @@
                 "name":"Châtel-St-Denis",
                 "easting": 2558329.8,
                 "northing": 1153084.6,
-                "altitude": 802.9
+                "altitude": 802.9,
+                "description":{
+                    "canton": "Fribourg",
+                    "district": "Veveyse",
+                    "syndic": "Charles Ducrot",
+                    "NPA":1618,
+                    "armoiries":"https://commons.wikimedia.org/wiki/File:Ch%C3%A2tel-Saint-Denis-coat_of_arms.svg?uselang=fr"
+                }
             },
             {
                 "name": "Bulle",
                 "easting": 2570412.0,
                 "northing": 1163172.0,
-                "altitude": 771.0
+                "altitude": 771.0,
+                "description":{
+                    "canton": "Fribourg",
+                    "district": "Gruyère",
+                    "syndic": "Jacques Morand",
+                    "NPA": 1630,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Bulle_-_Coat_of_arms_2.svg?uselang=fr"
+                }
             }
         ]
     },
@@ -164,13 +241,28 @@
                 "name": "Ins",
                 "easting": 2574217.4,
                 "northing": 1205463.9,
-                "altitude": 436.7
+                "altitude": 436.7,
+                "description":{
+                    "canton": "Berne",
+                    "disctrict": "Seeland",
+                    "maire": "Hans Urech",
+                    "NPA": 3232,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Ins-coat_of_arms.svg?uselang=fr"
+                }
             },
             {
                 "name": "Morat",
                 "easting": 2575368.4,
                 "northing": 1197147.3,
-                "altitude": 448.5
+                "altitude": 448.5,
+                "description":{
+                    "canton": "Fribourg",
+                    "district": "Lac",
+                    "syndic": "Petra Schlüchter",
+                    "NPA": 3280,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:CHE_Murten_COA.svg?uselang=fr"
+                }
+
             }
         ]
     }

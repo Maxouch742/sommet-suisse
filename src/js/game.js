@@ -291,6 +291,21 @@ map.on('click', function (event) {
  *
  **********************************************************************/
 
+function input_username () {
+  let person = prompt('Entrez votre nom:', username)
+  while (
+    person == null ||
+    person == '' ||
+    person == 'Anonyme' ||
+    person.length > 40
+  ) {
+    person = prompt('Entrez votre nom:', username)
+  }
+  username = person
+  document.getElementById('joueurName').innerText = username
+  return username
+}
+
 function computePoints (longueur) {
   let points = parseFloat(document.getElementById('joueurScore').innerText)
   let points_partie = (-0.1 * longueur) / 1000 + 50
@@ -520,4 +535,11 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   // Change summit
   // change label
   //
+})
+
+// Dès que la page est chargée
+document.addEventListener('load', function () {
+  input_username()
+
+  //TODO: charger le fichier des sommets
 })

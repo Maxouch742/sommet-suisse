@@ -384,7 +384,7 @@ async function fetchREFRAME (easting, northing, altitude) {
 
 function computePoints (longueur) {
   let points = parseFloat(document.getElementById('joueurScore').innerText)
-  let points_partie = (-0.1 * longueur) / 1000 + 50
+  let points_partie = (-50 * longueur) / 1000 + 50
 
   // check indice
   if (indices_list.length == 1) {

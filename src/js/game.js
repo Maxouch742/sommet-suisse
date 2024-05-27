@@ -195,7 +195,7 @@ const viewer = new Cesium.Viewer('cesiumContainer', {
   geocoder: false,
   baseLayerPicker: false,
   navigationHelpButton: false,
-  infoBox: false,
+  infoBox: true,
   selectionIndicator: false
 })
 // Blocage de la distance maximale pour éviter de trop dézoomer
@@ -327,7 +327,34 @@ function incrementNumber () {
 
 function createDescription (indice) {
   console.log('DESCRIPTION:', indice)
-  console.log('DESCRIPTION 2', indice.description)
+
+  if (indice.description != undefined) {
+    console.log('DESCRIPTION 2', indice.description)
+
+    const table = `<table class='table table-bordered table-dark table-striped'>
+        <thead><tr>
+          <th scope="col">Item</th><th scope="col">Description</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>Canton</td><td>${indice.description.canton}</td>
+          </tr>
+          <tr>
+            <td>District</td><td>${indice.description.district}</td>
+          </tr>
+          <tr>
+            <td>Syndic</td><td>${indice.description.syndic}</td>
+          </tr>
+          <tr>
+            <td>NPA</td><td>${indice.description.NPA}</td>
+          </tr>
+          <tr>
+            <td>Armoiries</td><td><a href="${indice.description.armoiries}" target='_blank'>link</a></td>
+          </tr>
+        </tbody>
+      </table>`
+    return table
+  }
 }
 
 // Fonction pour lire le fichier JSON et retourner les données
@@ -414,8 +441,6 @@ function computePoints (longueur) {
 }
 
 document.getElementById('indice').addEventListener('click', function () {
-  console.log('INDICE :', indices_list[0])
-
   const indice = indices_list[0]
 
   // Convert coordinates
@@ -431,7 +456,6 @@ document.getElementById('indice').addEventListener('click', function () {
         indice.latitude,
         indice.altitude
       )
-      console.log('POINT :', indice_point)
 
       // Add Symbol
       const cone = viewer.entities.add({

@@ -337,6 +337,9 @@ function createDescription (indice) {
         </tr></thead>
         <tbody>
           <tr>
+            <td>Commune :</td><td>${indice.name}</td>
+          </tr>
+          <tr>
             <td>Canton :</td><td>${indice.description.canton}</td>
           </tr>`
 
@@ -469,9 +472,11 @@ document.getElementById('indice').addEventListener('click', function () {
         indice.latitude,
         indice.altitude
       )
+      console.log('INDICE', indice.name)
+      console.log('POSITION indice', position_indice)
 
       // Add Symbol
-      const cone = viewer.entities.add({
+      viewer.entities.add({
         position: indice_point,
         cylinder: {
           length: 500.0,
@@ -479,26 +484,31 @@ document.getElementById('indice').addEventListener('click', function () {
           bottomRadius: 1,
           material: Cesium.Color.RED,
           heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-        }
+        },
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000)
       })
-      const cylinder = viewer.entities.add({
+
+      console.log('VIEWER CONE', viewer.entities.values.length)
+      viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(
           indice.longitude,
           indice.latitude,
           indice.altitude + 700
         ),
         cylinder: {
-          length: 700.0,
+          length: 7000.0,
           topRadius: 300,
           bottomRadius: 300,
           material: Cesium.Color.RED
         },
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000),
         name: indice.name,
         description: createDescription(indice)
       })
+      console.log('VIEWER CYLINDRE', viewer.entities.values.length)
 
       // Define the positions of the two points in WGS84 (longitude, latitude, height)
-      const point1 = Cesium.Cartesian3.fromDegrees(
+      /*const point1 = Cesium.Cartesian3.fromDegrees(
         summit.longitude,
         summit.latitude,
         summit.altitude
@@ -542,6 +552,7 @@ document.getElementById('indice').addEventListener('click', function () {
         point1_transform,
         new Cesium.HeadingPitchRange(yaw, pitch, 150)
       )
+      */
 
       // Add text
       document.getElementById('indice_text').innerHTML += ` ${indice.name},`
@@ -563,7 +574,7 @@ document
     //----- Openlayers
     const feature = marker_source.getFeatureById('marker')
     const feature_coord = feature.getGeometry().getCoordinates()
-    const coord_vrai = [2531332.62, 1189357.1]
+    const coord_vrai = [summit.easting, summit.northing]
 
     // Afficher la ligne entre les deux points
     const feature_line = new ol.Feature({
@@ -688,6 +699,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   //Delete feature on map3D
   viewer.entities.removeAll()
   viewer.scene.primitives.removeAll()
+  console.log('VIEWER', viewer.entities.values.length)
   displayBuildings(viewer)
 
   //Delete texte
@@ -713,7 +725,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
 
   // Enabled button
   document.getElementById('indice').disabled = false
-  document.getElementById('validateSummit').disabled = false
+  document.getElementById('validateSummit').disabled = true
   document.getElementById('buttonSuivant').disabled = true
   incrementNumber()
 

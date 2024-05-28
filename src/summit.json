@@ -152,44 +152,6 @@
         ]
     },
     {
-        "name":"Moudon",
-        "PFP1":{
-            "id": 12238030,
-            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001223_12238030.pdf"
-        },
-        "easting":  2548674.280,
-        "northing": 1169048.090,
-        "altitude": 832.540,
-        "indices":[
-            {
-                "name":"Chapelle-sur-Moudon",
-                "easting": 2546344.0,
-                "northing": 1169109.2,
-                "altitude": 772.4,
-                "description":{
-                    "canton": "Vaud",
-                    "district":"Gros-de-Vaud",
-                    "syndic":"Claude-Alain Cornu",
-                    "NPA": 1063,
-                    "armoiries": "https://commons.wikimedia.org/wiki/File:Chapelle-sur-Moudon-coat_of_arms.svg?uselang=fr"
-                }
-            },
-            {
-                "name":"Moudon",
-                "easting": 2551326.5,
-                "northing": 1168735.9,
-                "altitude": 509.9,
-                "description": {
-                    "canton":"Vaud",
-                    "district": "Broye-Vully",
-                    "syndic": "Carole Pico",
-                    "NPA": 1510,
-                    "armoiries": "https://commons.wikimedia.org/wiki/File:Moudon-coat_of_arms.svg?uselang=fr"
-                }
-            }
-        ]
-    },
-    {
         "name":"Moléson",
         "PFP1":{
             "id": 12450100,
@@ -223,6 +185,44 @@
                     "syndic": "Jacques Morand",
                     "NPA": 1630,
                     "armoiries": "https://commons.wikimedia.org/wiki/File:Bulle_-_Coat_of_arms_2.svg?uselang=fr"
+                }
+            }
+        ]
+    },
+    {
+        "name":"Moudon",
+        "PFP1":{
+            "id": 12238030,
+            "link": "https://data.geo.admin.ch/ch.swisstopo.fixpunkte-lfp1/protokolle/CH0300001223_12238030.pdf"
+        },
+        "easting":  2548674.280,
+        "northing": 1169048.090,
+        "altitude": 832.540,
+        "indices":[
+            {
+                "name":"Chapelle-sur-Moudon",
+                "easting": 2546344.0,
+                "northing": 1169109.2,
+                "altitude": 772.4,
+                "description":{
+                    "canton": "Vaud",
+                    "district":"Gros-de-Vaud",
+                    "syndic":"Claude-Alain Cornu",
+                    "NPA": 1063,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Chapelle-sur-Moudon-coat_of_arms.svg?uselang=fr"
+                }
+            },
+            {
+                "name":"Moudon",
+                "easting": 2551326.5,
+                "northing": 1168735.9,
+                "altitude": 509.9,
+                "description": {
+                    "canton":"Vaud",
+                    "district": "Broye-Vully",
+                    "syndic": "Carole Pico",
+                    "NPA": 1510,
+                    "armoiries": "https://commons.wikimedia.org/wiki/File:Moudon-coat_of_arms.svg?uselang=fr"
                 }
             }
         ]

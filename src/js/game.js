@@ -57,7 +57,7 @@ function lookAtSummit (viewer, longitude, latitude, altitude, name) {
 function showPyramid (viewer, longitude, latitude, altitude, name) {
   // Define the vertices for the pyramid base (a square) and the apex
   var baseHeight = 0.0 // Height of the base of the pyramid
-  var apexHeight = 5.0 // Height of the apex of the pyramid
+  var apexHeight = 10.0 // Height of the apex of the pyramid
 
   var baseSize = 3.0 // Half size of the base square
   var baseVertices = [
@@ -128,7 +128,7 @@ function showPyramid (viewer, longitude, latitude, altitude, name) {
       new Cesium.Matrix4()
     ),
     attributes: {
-      color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED)
+      color: Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.BLACK)
     }
   })
 

@@ -783,7 +783,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
     marker_source.removeFeature(feature)
   })
 
-  // Suppression des entités créés pour les indices et le sommet
+  // Suppression des entités créés pour les indices et le sommetok
   entities_list.forEach(function (entity) {
     console.log(entity.id)
     viewer.entities.remove(entity)

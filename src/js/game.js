@@ -10,6 +10,9 @@ let indices_list = []
 
 let click_on_map = true
 
+let indice_entity_1 = undefined
+let indice_entity_2 = undefined
+
 /*let indices_list = [
   {
     name: 'Fleurier',
@@ -459,6 +462,10 @@ function computePoints (longueur) {
 document.getElementById('indice').addEventListener('click', function () {
   const indice = indices_list[0]
 
+  if (indices_list.length == 2) {
+    indice_entity_1.show = true
+  }
+
   // Convert coordinates
   fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
     response => {
@@ -472,11 +479,13 @@ document.getElementById('indice').addEventListener('click', function () {
         indice.latitude,
         indice.altitude
       )
-      console.log('INDICE', indice.name)
-      console.log('POSITION indice', position_indice)
+      console.log('! INDICE', indice.name)
+      console.log('! POSITION indice', position_indice)
 
+      /**
       // Add Symbol
       viewer.entities.add({
+        parent: parent,
         position: indice_point,
         cylinder: {
           length: 500.0,
@@ -506,7 +515,7 @@ document.getElementById('indice').addEventListener('click', function () {
         description: createDescription(indice)
       })
       console.log('VIEWER CYLINDRE', viewer.entities.values.length)
-
+      */
       // Define the positions of the two points in WGS84 (longitude, latitude, height)
       /*const point1 = Cesium.Cartesian3.fromDegrees(
         summit.longitude,
@@ -710,6 +719,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   document.getElementById('indice_text').innerText = 'Indice :'
 
   map.getView().setMaxZoom(8)
+  //TODO: reinit center map
 
   // si le numero de la question est 4, alors on change le button de fin du jeu
   if (document.getElementById('questionNombre').innerText === '4') {
@@ -797,6 +807,124 @@ document.addEventListener('DOMContentLoaded', function () {
 
           // increment question
           incrementNumber()
+
+          // Créer les entities Cesium pour les indices
+          // indice 1
+          let indice = indices_list[0]
+          fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
+            response => {
+              const position_indice = response
+              indice.longitude = position_indice.longitude
+              indice.latitude = position_indice.latitude
+              indice.altitude = position_indice.altitude
+
+              const indice_point = Cesium.Cartesian3.fromDegrees(
+                indice.longitude,
+                indice.latitude,
+                indice.altitude
+              )
+              console.log('INDICE', indice.name)
+              console.log('POSITION indice', position_indice)
+
+              indice_entity_1 = viewer.entities.add(new Cesium.Entity())
+              viewer.entities.add({
+                parent: indice_entity_1,
+                position: indice_point,
+                cylinder: {
+                  length: 500.0,
+                  topRadius: 500,
+                  bottomRadius: 1,
+                  material: Cesium.Color.RED,
+                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                },
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+                  0,
+                  3000
+                )
+              })
+
+              console.log('VIEWER CONE', viewer.entities.values.length)
+              viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(
+                  indice.longitude,
+                  indice.latitude,
+                  indice.altitude + 700
+                ),
+                cylinder: {
+                  length: 7000.0,
+                  topRadius: 300,
+                  bottomRadius: 300,
+                  material: Cesium.Color.RED
+                },
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+                  0,
+                  3000
+                ),
+                name: indice.name,
+                description: createDescription(indice)
+              })
+            }
+          )
+
+          // Indice 2
+          indice = indices_list[1]
+          fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
+            response => {
+              const position_indice = response
+              indice.longitude = position_indice.longitude
+              indice.latitude = position_indice.latitude
+              indice.altitude = position_indice.altitude
+
+              const indice_point = Cesium.Cartesian3.fromDegrees(
+                indice.longitude,
+                indice.latitude,
+                indice.altitude
+              )
+              console.log('INDICE', indice.name)
+              console.log('POSITION indice', position_indice)
+
+              indice_entity_2 = viewer.entities.add(new Cesium.Entity())
+              viewer.entities.add({
+                parent: indice_entity_2,
+                position: indice_point,
+                cylinder: {
+                  length: 500.0,
+                  topRadius: 500,
+                  bottomRadius: 1,
+                  material: Cesium.Color.RED,
+                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                },
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+                  0,
+                  3000
+                )
+              })
+
+              console.log('VIEWER CONE', viewer.entities.values.length)
+              viewer.entities.add({
+                position: Cesium.Cartesian3.fromDegrees(
+                  indice.longitude,
+                  indice.latitude,
+                  indice.altitude + 700
+                ),
+                cylinder: {
+                  length: 7000.0,
+                  topRadius: 300,
+                  bottomRadius: 300,
+                  material: Cesium.Color.RED
+                },
+                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+                  0,
+                  3000
+                ),
+                name: indice.name,
+                description: createDescription(indice)
+              })
+            }
+          )
+
+          // TODO: créer les 2 parents avec les entitées directement maintenant
+          // puis dans la fonction, on vient afficher le parent ou non
         }
       )
     })

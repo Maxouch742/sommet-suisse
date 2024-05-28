@@ -1,42 +1,42 @@
 [
     {
         "nom":"Charles",
-        "score": 59,
+        "score": 1959,
         "date": "01.07.1969"
     },
     {
         "nom":"Georges",
-        "score": 69,
+        "score": 1969,
         "date": "01.07.1974"
     },
     {
         "nom":"Valéry",
-        "score": 74,
+        "score": 1974,
         "date": "01.07.1981"
     },
     {
         "nom":"François",
-        "score": 81,
+        "score": 1981,
         "date": "01.07.1995"
     },
     {
         "nom":"Jacques",
-        "score": 95,
+        "score": 1995,
         "date": "01.07.2007"
     },
     {
         "nom":"Nicolas",
-        "score": 7,
+        "score": 2007,
         "date": "01.07.2012"
     },
     {
         "nom":"François",
-        "score": 12,
+        "score": 2012,
         "date": "01.07.2017"
     },
     {
         "nom":"Emmanuel",
-        "score": 17,
+        "score": 2017,
         "date": "01.07.2027"
     }
 ]

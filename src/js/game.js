@@ -1,32 +1,10 @@
 let username = 'Anonyme'
 
-const longitude = 6.538256684
-const latitude = 46.851793418
-const altitude = 1662.2
-
 let summits = []
 let summit = {}
 let indices_list = []
 
 let click_on_map = true
-
-let indice_entity_1 = undefined
-let indice_entity_2 = undefined
-
-/*let indices_list = [
-  {
-    name: 'Fleurier',
-    longitude: 6.58132,
-    latitude: 46.90467,
-    altitude: 742.4
-  },
-  {
-    name: 'Yverdon',
-    longitude: 6.64098,
-    latitude: 46.77856,
-    altitude: 435
-  }
-]*/
 
 /***********************************************************************
  *
@@ -208,8 +186,6 @@ viewer.scene.screenSpaceCameraController.maximumZoomDistance = 6378
 viewer.scene.globe.depthTestAgainstTerrain = true
 
 displayBuildings(viewer)
-//lookAtSummit(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
-//showPyramid(viewer, 6.538256684, 46.851793418, 1662.2, 'Chasseron')
 
 /***********************************************************************
  *
@@ -313,7 +289,7 @@ function input_username () {
     person == null ||
     person == '' ||
     person == 'Anonyme' ||
-    person.length > 40
+    person == undefined
   ) {
     person = prompt('Entrez votre nom:', username)
   }
@@ -462,10 +438,6 @@ function computePoints (longueur) {
 document.getElementById('indice').addEventListener('click', function () {
   const indice = indices_list[0]
 
-  if (indices_list.length == 2) {
-    indice_entity_1.show = true
-  }
-
   // Convert coordinates
   fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
     response => {
@@ -474,19 +446,16 @@ document.getElementById('indice').addEventListener('click', function () {
       indice.latitude = position_indice.latitude
       indice.altitude = position_indice.altitude
 
-      const indice_point = Cesium.Cartesian3.fromDegrees(
-        indice.longitude,
-        indice.latitude,
-        indice.altitude
-      )
-      console.log('! INDICE', indice.name)
-      console.log('! POSITION indice', position_indice)
+      console.log('INDICE', indice.name)
+      console.log('POSITION indice', position_indice)
 
-      /**
       // Add Symbol
       viewer.entities.add({
-        parent: parent,
-        position: indice_point,
+        position: Cesium.Cartesian3.fromDegrees(
+          indice.longitude,
+          indice.latitude,
+          indice.altitude
+        ),
         cylinder: {
           length: 500.0,
           topRadius: 500,
@@ -494,9 +463,11 @@ document.getElementById('indice').addEventListener('click', function () {
           material: Cesium.Color.RED,
           heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
         },
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000)
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+          0,
+          3000000
+        )
       })
-
       console.log('VIEWER CONE', viewer.entities.values.length)
       viewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(
@@ -505,19 +476,22 @@ document.getElementById('indice').addEventListener('click', function () {
           indice.altitude + 700
         ),
         cylinder: {
-          length: 7000.0,
+          length: 700.0,
           topRadius: 300,
           bottomRadius: 300,
           material: Cesium.Color.RED
         },
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000),
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+          0,
+          3000000
+        ),
         name: indice.name,
         description: createDescription(indice)
       })
       console.log('VIEWER CYLINDRE', viewer.entities.values.length)
-      */
+
       // Define the positions of the two points in WGS84 (longitude, latitude, height)
-      /*const point1 = Cesium.Cartesian3.fromDegrees(
+      const point1 = Cesium.Cartesian3.fromDegrees(
         summit.longitude,
         summit.latitude,
         summit.altitude
@@ -527,7 +501,11 @@ document.getElementById('indice').addEventListener('click', function () {
       // Calculate the direction vector from point1 to point2
       const direction = Cesium.Cartesian3.subtract(
         point1,
-        indice_point,
+        Cesium.Cartesian3.fromDegrees(
+          indice.longitude,
+          indice.latitude,
+          indice.altitude
+        ),
         new Cesium.Cartesian3()
       )
       Cesium.Cartesian3.normalize(direction, direction)
@@ -561,7 +539,6 @@ document.getElementById('indice').addEventListener('click', function () {
         point1_transform,
         new Cesium.HeadingPitchRange(yaw, pitch, 150)
       )
-      */
 
       // Add text
       document.getElementById('indice_text').innerHTML += ` ${indice.name},`
@@ -601,7 +578,6 @@ document
     marker_source.addFeature(feature_line)
 
     // Afficher la longueur de la ligne
-    // Calculez la longueur de la ligne
     const length = feature_line.getGeometry().getLength()
     const lengthFormatted = (length / 1000).toFixed(2) + ' km'
     const midPoint = feature_line.getGeometry().getCoordinateAt(0.5) // Obtenez le point au milieu de la ligne
@@ -673,7 +649,11 @@ document
     //------ Cesium
     // Add Cylinder
     const cylinder = viewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(longitude, latitude, altitude),
+      position: Cesium.Cartesian3.fromDegrees(
+        summit.longitude,
+        summit.latitude,
+        summit.altitude
+      ),
       cylinder: {
         length: 200.0,
         topRadius: 0.2,
@@ -682,7 +662,7 @@ document
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
       },
       label: {
-        text: 'Chasseron',
+        text: summit.name,
         fillColor: Cesium.Color.WHITE,
         horizontalOrigin: Cesium.HorizontalOrigin.RIGHT
       }
@@ -695,8 +675,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
     alert(`Vous avez terminé ! Votre score est de ${points} points`)
 
     // Retourner au menu home
-    window.location.href =
-      'https://maxouch742.github.io/sommet-suisse/index.html'
+    window.location.href = 'https://maxouch742.github.io/sommet-suisse/'
   }
 
   // Delete features on map openlayers
@@ -718,15 +697,13 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
 
   document.getElementById('indice_text').innerText = 'Indice :'
 
-  map.getView().setMaxZoom(8)
-  //TODO: reinit center map
+  map.getView().setMaxZoom(9.5)
+  click_on_map = true
 
   // si le numero de la question est 4, alors on change le button de fin du jeu
   if (document.getElementById('questionNombre').innerText === '4') {
     document.getElementById('buttonSuivant').innerText = 'Fin'
   }
-
-  click_on_map = true
 
   // Afficher le nouveau sommet
   summits.shift()
@@ -792,139 +769,23 @@ document.addEventListener('DOMContentLoaded', function () {
           // Show summit
           lookAtSummit(
             viewer,
-            position_summit.longitude,
-            position_summit.latitude,
-            position_summit.altitude,
+            summit.longitude,
+            summit.latitude,
+            summit.altitude,
             summit.name
           )
           showPyramid(
             viewer,
-            position_summit.longitude,
-            position_summit.latitude,
-            position_summit.altitude,
+            summit.longitude,
+            summit.latitude,
+            summit.altitude,
             summit.name
           )
 
           // increment question
           incrementNumber()
 
-          // Créer les entities Cesium pour les indices
-          // indice 1
-          let indice = indices_list[0]
-          fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
-            response => {
-              const position_indice = response
-              indice.longitude = position_indice.longitude
-              indice.latitude = position_indice.latitude
-              indice.altitude = position_indice.altitude
-
-              const indice_point = Cesium.Cartesian3.fromDegrees(
-                indice.longitude,
-                indice.latitude,
-                indice.altitude
-              )
-              console.log('INDICE', indice.name)
-              console.log('POSITION indice', position_indice)
-
-              indice_entity_1 = viewer.entities.add(new Cesium.Entity())
-              viewer.entities.add({
-                parent: indice_entity_1,
-                position: indice_point,
-                cylinder: {
-                  length: 500.0,
-                  topRadius: 500,
-                  bottomRadius: 1,
-                  material: Cesium.Color.RED,
-                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-                },
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
-                  0,
-                  3000
-                )
-              })
-
-              console.log('VIEWER CONE', viewer.entities.values.length)
-              viewer.entities.add({
-                position: Cesium.Cartesian3.fromDegrees(
-                  indice.longitude,
-                  indice.latitude,
-                  indice.altitude + 700
-                ),
-                cylinder: {
-                  length: 7000.0,
-                  topRadius: 300,
-                  bottomRadius: 300,
-                  material: Cesium.Color.RED
-                },
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
-                  0,
-                  3000
-                ),
-                name: indice.name,
-                description: createDescription(indice)
-              })
-            }
-          )
-
-          // Indice 2
-          indice = indices_list[1]
-          fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
-            response => {
-              const position_indice = response
-              indice.longitude = position_indice.longitude
-              indice.latitude = position_indice.latitude
-              indice.altitude = position_indice.altitude
-
-              const indice_point = Cesium.Cartesian3.fromDegrees(
-                indice.longitude,
-                indice.latitude,
-                indice.altitude
-              )
-              console.log('INDICE', indice.name)
-              console.log('POSITION indice', position_indice)
-
-              indice_entity_2 = viewer.entities.add(new Cesium.Entity())
-              viewer.entities.add({
-                parent: indice_entity_2,
-                position: indice_point,
-                cylinder: {
-                  length: 500.0,
-                  topRadius: 500,
-                  bottomRadius: 1,
-                  material: Cesium.Color.RED,
-                  heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-                },
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
-                  0,
-                  3000
-                )
-              })
-
-              console.log('VIEWER CONE', viewer.entities.values.length)
-              viewer.entities.add({
-                position: Cesium.Cartesian3.fromDegrees(
-                  indice.longitude,
-                  indice.latitude,
-                  indice.altitude + 700
-                ),
-                cylinder: {
-                  length: 7000.0,
-                  topRadius: 300,
-                  bottomRadius: 300,
-                  material: Cesium.Color.RED
-                },
-                distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
-                  0,
-                  3000
-                ),
-                name: indice.name,
-                description: createDescription(indice)
-              })
-            }
-          )
-
-          // TODO: créer les 2 parents avec les entitées directement maintenant
-          // puis dans la fonction, on vient afficher le parent ou non
+          console.log('2707', viewer.entities.values.length)
         }
       )
     })

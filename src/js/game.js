@@ -1,9 +1,19 @@
+/***********************************************************************
+ *
+ * VARIABLES GLOBALES
+ *
+ **********************************************************************/
+
+// Nom temporaire du joueur
 let username = 'Anonyme'
 
+// Variables pour lire le fichier 'summit.json'
 let summits = []
 let summit = {}
 let indices_list = []
+let entities_list = []
 
+// Empecher l'utilisateur de cliquer sur la map, une fois qu'il a cliqué sur le bouton 'Valider'
 let click_on_map = true
 
 /***********************************************************************
@@ -21,6 +31,10 @@ let click_on_map = true
 
 //----------------------- FONCTIONS -----------------------
 
+/**
+ * Afficher le modèle swissTLM3D dans le viewer Cesium
+ * @param {Object} viewer
+ */
 async function displayBuildings (viewer) {
   const buildings = await Cesium.Cesium3DTileset.fromUrl(
     'https://vectortiles0.geo.admin.ch/3d-tiles/ch.swisstopo.swisstlm3d.3d/20180716/tileset.json',
@@ -37,16 +51,22 @@ async function displayBuildings (viewer) {
   viewer.scene.primitives.add(buildings)
 }
 
+/**
+ * Permet de déplacer la caméra sur le sommet en question,
+ * et bloquer la translation de la camera
+ * @param {Object} viewer
+ * @param {Number} longitude
+ * @param {Number} latitude
+ * @param {Number} altitude
+ * @param {String} name
+ */
 function lookAtSummit (viewer, longitude, latitude, altitude, name) {
-  // Create point
   const point = Cesium.Cartesian3.fromDegrees(
     longitude,
     latitude,
     altitude - 50
   )
-  // 6.538256684, 46.851793418, 1662.2
 
-  // Deplace view
   const transform = Cesium.Transforms.eastNorthUpToFixedFrame(point)
   viewer.scene.camera.lookAtTransform(
     transform,
@@ -54,6 +74,16 @@ function lookAtSummit (viewer, longitude, latitude, altitude, name) {
   )
 }
 
+/**
+ * Créer une pyramide (primitive) à afficher au sommet de la montage,
+ * pour mettre en évidence le sommet adéquat
+ * Source: ChatGPT
+ * @param {Object} viewer
+ * @param {Number} longitude
+ * @param {Number} latitude
+ * @param {Number} altitude
+ * @param {String} name
+ */
 function showPyramid (viewer, longitude, latitude, altitude, name) {
   // Define the vertices for the pyramid base (a square) and the apex
   var baseHeight = 0.0 // Height of the base of the pyramid
@@ -146,7 +176,7 @@ function showPyramid (viewer, longitude, latitude, altitude, name) {
 Cesium.Ion.defaultAccessToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwNGY0Mjk4Ny1kYWMxLTQwZjMtOWM5YS0zZDY0Y2UyYTI5MTciLCJpZCI6MTk3MjAyLCJpYXQiOjE3MDg2MDY5MzN9.0zahHvP9QC7E_C0zRuIDDe_QTPEuUafXfgvRREVXAis'
 
-// Define viewer for cesium map
+// Definition du viewer Cesium
 const viewer = new Cesium.Viewer('cesiumContainer', {
   terrainProvider: new Cesium.CesiumTerrainProvider({
     url: 'https://download.swissgeol.ch/cli_terrain/ch-2m/',
@@ -185,6 +215,7 @@ viewer.scene.screenSpaceCameraController.maximumZoomDistance = 6378
 // IMPORTANT: batiment invisble à travers le terrain
 viewer.scene.globe.depthTestAgainstTerrain = true
 
+// Afficher les bâtiments.
 displayBuildings(viewer)
 
 /***********************************************************************
@@ -227,7 +258,7 @@ const map = new ol.Map({
   })
 })
 
-// Initialisation des layers
+// Initialisation du layer de la map OpenLayers
 const marker_source = new ol.source.Vector()
 const marker_layer = new ol.layer.Vector({
   source: marker_source
@@ -262,10 +293,10 @@ map.on('click', function (event) {
         })
       })
     )
-    // Ajouter le marqueur à la source de vecteur
+    // Ajouter le marqueur au layer
     marker_source.addFeature(marker)
 
-    // Activer le bouton
+    // Activer le bouton 'Valider'
     document.getElementById('validateSummit').disabled = false
   }
 })
@@ -283,8 +314,13 @@ map.on('click', function (event) {
  *
  **********************************************************************/
 
+/**
+ * Gérer l'entrée du nom de l'utilisateur
+ */
 function input_username () {
   let person = prompt('Entrez votre nom:', username)
+
+  // Boucle de contrôle pour obtenir un nom pas générique
   while (
     person == null ||
     person == '' ||
@@ -293,24 +329,30 @@ function input_username () {
   ) {
     person = prompt('Entrez votre nom:', username)
   }
+
+  // Afficher le nom et retourner le nom
   username = person
   document.getElementById('joueurName').innerText = username
-  return username
 }
 
+/**
+ * Incrémenter le numéro de la question
+ */
 function incrementNumber () {
+  // récupérer le numéro actuel
   let numb = parseFloat(document.getElementById('questionNombre').innerText)
   numb += 1
+  // afficher le numéro incrémenté
   document.getElementById('questionNombre').innerText = numb
 }
 
+/**
+ * Création d'une chaîne de caractères pour afficher un tableau avec toutes les données de la description de l'indice et qui s'affichera dans l'infoBox de Cesium
+ * @param {Object} indice
+ * @returns {String}
+ */
 function createDescription (indice) {
-  console.log('DESCRIPTION:', indice)
-
-  if (indice.description != undefined) {
-    console.log('DESCRIPTION 2', indice.description)
-
-    let table = `<table class='table table-bordered table-dark table-striped .bg-black'>
+  let table = `<table class='table table-bordered table-dark table-striped .bg-black'>
         <thead><tr>
           <th scope="col">Item</th><th scope="col">Description</th>
         </tr></thead>
@@ -322,37 +364,42 @@ function createDescription (indice) {
             <td>Canton :</td><td>${indice.description.canton}</td>
           </tr>`
 
-    if (indice.description.region != undefined) {
-      table += `<tr>
+  // On ajuste le contenu du tableau en fonction des entrées du json et des cantons
+  if (indice.description.region != undefined) {
+    table += `<tr>
       <td>Région :</td><td>${indice.description.region}</td>
     </tr>`
-    } else {
-      table += `<tr>
+  } else {
+    table += `<tr>
       <td>District :</td><td>${indice.description.district}</td>
     </tr>`
-    }
-
-    if (indice.description.syndic != undefined) {
-      table += `<tr><td>Syndic :</td><td>${indice.description.syndic}</td></tr>`
-    } else if (indice.description.maire != undefined) {
-      table += `<tr><td>Maire :</td><td>${indice.description.maire}</td></tr>`
-    } else if (indice.description.president != undefined) {
-      table += `<tr><td>Président :</td><td>${indice.description.president}</td></tr>`
-    }
-
-    table += `<tr>
-            <td>NPA :</td><td>${indice.description.NPA}</td>
-          </tr>
-          <tr>
-            <td>Armoirie :</td><td><a href="${indice.description.armoiries}" target='_blank'>link</a></td>
-          </tr>
-        </tbody>
-      </table>`
-    return table
   }
+
+  // On ajuste le contenu du tableau en fonction du nom du syndic (selon canton)
+  if (indice.description.syndic != undefined) {
+    table += `<tr><td>Syndic :</td><td>${indice.description.syndic}</td></tr>`
+  } else if (indice.description.maire != undefined) {
+    table += `<tr><td>Maire :</td><td>${indice.description.maire}</td></tr>`
+  } else if (indice.description.president != undefined) {
+    table += `<tr><td>Président :</td><td>${indice.description.president}</td></tr>`
+  }
+
+  table += `<tr>
+          <td>NPA :</td><td>${indice.description.NPA}</td>
+        </tr>
+        <tr>
+          <td>Armoirie :</td><td><a href="${indice.description.armoiries}" target='_blank'>link</a></td>
+        </tr>
+      </tbody>
+    </table>`
+  return table
 }
 
-// Fonction pour lire le fichier JSON et retourner les données
+/**
+ * Lire le fichier JSON des sommets de montages et retourner le contenu
+ * Source: ChatGPT
+ * @returns {String}
+ */
 async function fetchJSON () {
   try {
     // Utilise fetch pour récupérer le fichier JSON
@@ -377,6 +424,14 @@ async function fetchJSON () {
   }
 }
 
+/**
+ * Conversion des coordonnées suisses (système MN95) en coordonnées
+ * globabes (système WGS84) grâce à l'API Reframe de swisstopo
+ * @param {Number} east
+ * @param {Number} north
+ * @param {Number} altitude
+ * @returns {Object}
+ */
 async function mn95ToWgs84 (east, north, altitude) {
   const response = await fetch(
     `https://geodesy.geo.admin.ch/reframe/lv95towgs84?easting=${east}&northing=${north}&altitude=${altitude}&format=json`,
@@ -388,6 +443,16 @@ async function mn95ToWgs84 (east, north, altitude) {
   return result
 }
 
+/**
+ *
+ * Conversion de l'altitude usuelle (système NF02) en hauteur
+ * ellipsoïdale (ellipsoïde Bessel 1941) grâce à l'API Reframe
+ * de swisstopo
+ * @param {Number} east
+ * @param {Number} north
+ * @param {Number} altitude
+ * @returns {Object}
+ */
 async function nf02ToBessel (east, north, altitude) {
   const response = await fetch(
     `https://geodesy.geo.admin.ch/reframe/ln02tobessel?easting=${east}&northing=${north}&altitude=${altitude}&format=json`,
@@ -399,6 +464,14 @@ async function nf02ToBessel (east, north, altitude) {
   return result
 }
 
+/**
+ * Permet de convertir les coordonnées (E,N,H_NF02) en coordonnées
+ * globales WGS84
+ * @param {Number} easting
+ * @param {Number} northing
+ * @param {Number} altitude
+ * @returns {Object}
+ */
 async function fetchREFRAME (easting, northing, altitude) {
   // NF02 to Bessel
   const height_bessel = await nf02ToBessel(easting, northing, altitude)
@@ -410,6 +483,7 @@ async function fetchREFRAME (easting, northing, altitude) {
     parseFloat(height_bessel.altitude)
   )
 
+  // Création du dictionnaire de réponse
   const response = {
     longitude: parseFloat(wgs84.easting),
     latitude: parseFloat(wgs84.northing),
@@ -418,11 +492,18 @@ async function fetchREFRAME (easting, northing, altitude) {
   return response
 }
 
+/**
+ * Calcul du nombre de points correspondants à l'écart, et affichage
+ * des scores et nombres de points
+ * @param {Number} longueur
+ */
 function computePoints (longueur) {
+  // Récupérer le score actuel
   let points = parseFloat(document.getElementById('joueurScore').innerText)
-  let points_partie = -0.1 * (longueur / 1000) + 50
 
-  // check indice
+  // Calcul du nombre de points
+  let points_partie = -0.1 * (longueur / 1000) + 50
+  // Calcul du nombre de points en fonction de l'utilisation des indices
   if (indices_list.length == 1) {
     points_partie -= 10
   }
@@ -430,27 +511,31 @@ function computePoints (longueur) {
     points_partie -= 10
   }
 
+  // Affichage des données
   document.getElementById('points').innerText = points_partie.toFixed(0)
   points += points_partie
   document.getElementById('joueurScore').innerText = points.toFixed(0)
 }
 
+/**
+ * Gestion de l'affichage des indices quand l'utilisateur clique
+ * sur le bouton 'Indice'
+ */
 document.getElementById('indice').addEventListener('click', function () {
   const indice = indices_list[0]
 
-  // Convert coordinates
+  // Conversion des coordonnées
   fetchREFRAME(indice.easting, indice.northing, indice.altitude).then(
     response => {
+      // Récupérer la position convertit
       const position_indice = response
       indice.longitude = position_indice.longitude
       indice.latitude = position_indice.latitude
       indice.altitude = position_indice.altitude
 
-      console.log('INDICE', indice.name)
-      console.log('POSITION indice', position_indice)
-
-      // Add Symbol
-      viewer.entities.add({
+      // Ajout du cone
+      const cone = viewer.entities.add({
+        id: indice.name + '_cone',
         position: Cesium.Cartesian3.fromDegrees(
           indice.longitude,
           indice.latitude,
@@ -468,8 +553,10 @@ document.getElementById('indice').addEventListener('click', function () {
           3000000
         )
       })
-      console.log('VIEWER CONE', viewer.entities.values.length)
-      viewer.entities.add({
+
+      // Ajout du cylindre
+      const cylindre = viewer.entities.add({
+        id: indice.name + '_cylindre',
         position: Cesium.Cartesian3.fromDegrees(
           indice.longitude,
           indice.latitude,
@@ -488,9 +575,11 @@ document.getElementById('indice').addEventListener('click', function () {
         name: indice.name,
         description: createDescription(indice)
       })
-      console.log('VIEWER CYLINDRE', viewer.entities.values.length)
 
-      // Define the positions of the two points in WGS84 (longitude, latitude, height)
+      entities_list.push(cone)
+      entities_list.push(cylindre)
+
+      // Creation du point objet 'Cesium' du sommet
       const point1 = Cesium.Cartesian3.fromDegrees(
         summit.longitude,
         summit.latitude,
@@ -498,7 +587,7 @@ document.getElementById('indice').addEventListener('click', function () {
       )
       const point1_transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
 
-      // Calculate the direction vector from point1 to point2
+      // Calculer le vecteur direction du Sommet vers l'indice
       const direction = Cesium.Cartesian3.subtract(
         point1,
         Cesium.Cartesian3.fromDegrees(
@@ -510,7 +599,7 @@ document.getElementById('indice').addEventListener('click', function () {
       )
       Cesium.Cartesian3.normalize(direction, direction)
 
-      // Calculate the yaw (heading), pitch, and roll angles
+      // Calcul des angles yaw pitch and roll
       const transform = Cesium.Transforms.eastNorthUpToFixedFrame(point1)
       const quaternion = Cesium.Quaternion.fromRotationMatrix(
         Cesium.Matrix4.getMatrix3(transform, new Cesium.Matrix3())
@@ -529,23 +618,19 @@ document.getElementById('indice').addEventListener('click', function () {
       yaw = Cesium.Math.toDegrees(yaw)
       let pitch = Math.asin(directionLocal.z)
 
-      console.log(yaw)
-      console.log(Cesium.Math.toRadians(yaw))
-      if (yaw < 0) {
-        yaw = 2 * Math.PI + yaw
-      }
-
+      // Modification de l'orientation de la caméra
       viewer.scene.camera.lookAtTransform(
         point1_transform,
         new Cesium.HeadingPitchRange(yaw, pitch, 150)
       )
 
-      // Add text
+      // Ajout du nom de l'indice dans le champ associé
       document.getElementById('indice_text').innerHTML += ` ${indice.name},`
 
-      // Delete first indice in list
+      // Supprimer l'indice de la liste
       indices_list.shift()
-      // Disabled button
+
+      // Désactiver l'indice car il en existe plus dans la liste
       if (indices_list.length < 1) {
         const button_indice = document.getElementById('indice')
         button_indice.disabled = true
@@ -554,15 +639,19 @@ document.getElementById('indice').addEventListener('click', function () {
   )
 })
 
+/**
+ * Afficher la bonne réponse lorsque l'utilisateur clique sur
+ * le bouton 'Valider'
+ */
 document
   .getElementById('validateSummit')
   .addEventListener('click', function () {
-    //----- Openlayers
+    // Récupérer les coordonnées cliqué de l'utilisateur et les coordonnées vrai du sommet
     const feature = marker_source.getFeatureById('marker')
     const feature_coord = feature.getGeometry().getCoordinates()
     const coord_vrai = [summit.easting, summit.northing]
 
-    // Afficher la ligne entre les deux points
+    // Afficher la ligne entre les deux points dans la carte openlayers
     const feature_line = new ol.Feature({
       geometry: new ol.geom.LineString([feature_coord, coord_vrai])
     })
@@ -603,7 +692,7 @@ document
     )
     marker_source.addFeature(textFeature)
 
-    // Afficher le vrai sommet
+    // Afficher un marker pour montrer la position du vrai sommet
     const feature_vrai = new ol.Feature({
       geometry: new ol.geom.Point(coord_vrai)
     })
@@ -618,7 +707,8 @@ document
           stroke: new ol.style.Stroke({
             color: '#000',
             width: 1
-          })
+          }),
+          offsetY: 15
         }),
         image: new ol.style.Icon({
           src: 'https://maxouch742.github.io/sommet-suisse/src/img/marker.svg',
@@ -630,14 +720,15 @@ document
     )
     marker_source.addFeature(feature_vrai)
 
-    // Autoriser le zoom max
+    // Autoriser le zoom max sur la carte
     map.getView().setMaxZoom(16)
 
-    // Autoriser le click sur bouton suivant
+    // Autoriser le click sur bouton suivant et désactiver les autres boutons
     document.getElementById('indice').disabled = true
     document.getElementById('validateSummit').disabled = true
     document.getElementById('buttonSuivant').disabled = false
 
+    // Bloquer le fait de pouvoir recliquer sur la map
     click_on_map = false
 
     // Affiche le score et la réponse
@@ -647,8 +738,9 @@ document
     computePoints(length)
 
     //------ Cesium
-    // Add Cylinder
-    const cylinder = viewer.entities.add({
+    // Ajout d'un cylindre noir pour montrer la position exacte du sommet
+    const entity_summit = viewer.entities.add({
+      id: summit.name,
       position: Cesium.Cartesian3.fromDegrees(
         summit.longitude,
         summit.latitude,
@@ -667,9 +759,16 @@ document
         horizontalOrigin: Cesium.HorizontalOrigin.RIGHT
       }
     })
+    entities_list.push(entity_summit)
   })
 
+/**
+ * Permet de réinitialiser les différents textes et affichages (map
+ * openlayers et cesium) lorsque l'utilisateur veut passer à la
+ * question suivante
+ */
 document.getElementById('buttonSuivant').addEventListener('click', function () {
+  // Si le bouton 'Suivant' a un texte 'Fin', on affiche le résultat final car le jeu est fini
   if (document.getElementById('buttonSuivant').innerText === 'Fin') {
     const points = document.getElementById('joueurScore').innerText
     alert(`Vous avez terminé ! Votre score est de ${points} points`)
@@ -678,45 +777,47 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
     window.location.href = 'https://maxouch742.github.io/sommet-suisse/'
   }
 
-  // Delete features on map openlayers
+  // Suppression de l'ensemble des objets sur la carte Openlayers
   const features_ol = marker_source.getFeatures()
   features_ol.forEach(feature => {
     marker_source.removeFeature(feature)
   })
 
-  //Delete feature on map3D
-  viewer.entities.removeAll()
-  viewer.scene.primitives.removeAll()
-  console.log('VIEWER', viewer.entities.values.length)
-  displayBuildings(viewer)
+  // Suppression des entités créés pour les indices et le sommet
+  entities_list.forEach(function (entity) {
+    console.log(entity.id)
+    viewer.entities.remove(entity)
+  })
 
-  //Delete texte
+  // Suppression des éléments liés à la réponse de question
   document.getElementById('points').innerText = ''
   document.getElementById('reponse').innerText = ''
   document.getElementById('ecart').innerText = ''
-
   document.getElementById('indice_text').innerText = 'Indice :'
 
-  map.getView().setMaxZoom(9.5)
-  click_on_map = true
-
-  // si le numero de la question est 4, alors on change le button de fin du jeu
-  if (document.getElementById('questionNombre').innerText === '4') {
-    document.getElementById('buttonSuivant').innerText = 'Fin'
-  }
-
-  // Afficher le nouveau sommet
-  summits.shift()
-  summit = summits[0]
-  indices_list = summit.indices
-
-  // Enabled button
+  // Désactiver les boutons
   document.getElementById('indice').disabled = false
   document.getElementById('validateSummit').disabled = true
   document.getElementById('buttonSuivant').disabled = true
   incrementNumber()
 
-  // convert data
+  // Réinitialiser la vue de la carte Openlayers
+  map.getView().setMaxZoom(9.5)
+  map.getView().setZoom(8)
+  map.getView().setCenter([2660156.229, 1183629.32])
+  click_on_map = true
+
+  // S le numero de la question est 4, alors on change le button pour signaler la fin du jeu
+  if (document.getElementById('questionNombre').innerText === '4') {
+    document.getElementById('buttonSuivant').innerText = 'Fin'
+  }
+
+  // Chercher les informations du prochain sommet
+  summits.shift()
+  summit = summits[0]
+  indices_list = summit.indices
+
+  // Convertir les coordonnées du prochain sommet
   fetchREFRAME(summit.easting, summit.northing, summit.altitude).then(
     response => {
       const position_summit = response
@@ -726,7 +827,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
       summit.longitude = position_summit.longitude
       summit.altitude = position_summit.altitude
 
-      // Show summit
+      // Afficher le sommet
       lookAtSummit(
         viewer,
         position_summit.longitude,
@@ -734,6 +835,7 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
         position_summit.altitude,
         summit.name
       )
+      // Dessiner la pyramide en haut du sommet
       showPyramid(
         viewer,
         position_summit.longitude,
@@ -745,8 +847,9 @@ document.getElementById('buttonSuivant').addEventListener('click', function () {
   )
 })
 
-// Dès que la page est chargée
+// Dès que la page est chargée complètement, on affiche les éléments de la première question
 document.addEventListener('DOMContentLoaded', function () {
+  // On souhaite que l'utilisateur entre son nom de joueur
   input_username()
 
   // Charger le fichier de sommets
@@ -766,26 +869,25 @@ document.addEventListener('DOMContentLoaded', function () {
           summit.longitude = position_summit.longitude
           summit.altitude = position_summit.altitude
 
-          // Show summit
+          // Afficher le sommet
           lookAtSummit(
             viewer,
-            summit.longitude,
-            summit.latitude,
-            summit.altitude,
+            position_summit.longitude,
+            position_summit.latitude,
+            position_summit.altitude,
             summit.name
           )
+          // Dessiner la pyramide en haut du sommet
           showPyramid(
             viewer,
-            summit.longitude,
-            summit.latitude,
-            summit.altitude,
+            position_summit.longitude,
+            position_summit.latitude,
+            position_summit.altitude,
             summit.name
           )
 
           // increment question
           incrementNumber()
-
-          console.log('2707', viewer.entities.values.length)
         }
       )
     })
